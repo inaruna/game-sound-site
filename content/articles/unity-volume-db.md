@@ -105,7 +105,7 @@ public class VolumeSlider : MonoBehaviour
     void Start()
     {
         float saved = PlayerPrefs.GetFloat(parameter, 0.8f);
-        // 値が同じだと OnValueChanged は呼ばれないため、明示的に適用する
+        // SetValueWithoutNotify は onValueChanged を呼ばないので、音量はここで明示的に適用する
         slider.SetValueWithoutNotify(saved);
         SetVolume(saved);
     }

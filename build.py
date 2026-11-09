@@ -113,7 +113,7 @@ def itch_box():
     if not CFG.get("itch_url"):
         return ""
     return (f'<div class="boxwrap"><a class="box own" href="{esc(CFG["itch_url"])}" target="_blank" rel="noopener">'
-            f'<span class="tag">当サイト運営者の素材（販売中）</span><strong>{esc(CFG["itch_title"])}</strong>'
+            f'<span class="tag">{esc(CFG.get("itch_label","当サイト運営者の商品（販売中）"))}</span><strong>{esc(CFG["itch_title"])}</strong>'
             f'<span>{esc(CFG["itch_desc"])}</span><span class="go">itch.ioで見る →</span></a></div>')
 
 
@@ -162,11 +162,11 @@ def disclosure(body, what="この記事"):
     aff = 'rel="sponsored' in body
     own = 'class="box own"' in body or 'class="card own"' in body
     if aff and own:
-        text = f"{what}には広告（アフィリエイトリンク）と、当サイト運営者が販売している素材の紹介が含まれます。リンクから商品が購入されると、当サイトに報酬が支払われることがあります。"
+        text = f"{what}には広告（アフィリエイトリンク）と、当サイト運営者が販売している商品の紹介が含まれます。リンクから商品が購入されると、当サイトに報酬が支払われることがあります。"
     elif aff:
         text = f"{what}には広告（アフィリエイトリンク）が含まれます。リンクから商品が購入されると、当サイトに報酬が支払われることがあります。"
     elif own:
-        text = f"{what}には、当サイト運営者が販売している素材の紹介が含まれます。"
+        text = f"{what}には、当サイト運営者が販売している商品の紹介が含まれます。"
     else:
         return ""
     return f'<p class="pr">【PR】{text}</p>'
@@ -210,9 +210,9 @@ def build():
     body = (f'<h1>運営者情報</h1><table><tr><th>サイト名</th><td>{esc(SITE)}</td></tr>'
             f'<tr><th>運営者</th><td>{op}</td></tr><tr><th>連絡先</th><td>{ct}</td></tr>'
             f'<tr><th>内容</th><td>{esc(CFG["site_description"])}</td></tr></table>'
-            '<p>当サイトは、ゲーム用の効果音素材を制作・販売している個人が運営しています。'
-            '記事内で紹介する運営者自身の素材には「当サイト運営者の素材（販売中）」と表示しています。</p>'
-            + (f'<p>販売ページ：<a href="{esc(CFG["itch_url"])}" target="_blank" rel="noopener">itch.io</a></p>' if CFG.get("itch_url") else "")
+            '<p>当サイトは、ゲーム用の効果音素材と制作ツールを販売している個人が運営しています。'
+            '記事内で紹介する運営者自身の商品には「当サイト運営者の〇〇（販売中）」と表示しています。</p>'
+            + ('<p>販売中の商品（itch.io）：' + '、'.join(f'<a href="{esc(x["url"])}" target="_blank" rel="noopener">{esc(x["name"])}</a>' for x in CFG.get("itch_products", [])) + '</p>' if CFG.get("itch_products") else "")
             + '<p>当サイトはアフィリエイトプログラムで収入を得ることがあります。紹介する商品は、公式の仕様や出版社の情報をもとに選んでおり、'
             '実際に使っていない商品を体験談として紹介することはありません。</p>')
     write("about/index.html", page("運営者情報", body, "../", f"{SITE}の運営者情報です。", "about/"))

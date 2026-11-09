@@ -4,11 +4,26 @@
   "site_url": "https://inaruna.github.io/game-sound-site",
   "operator_name": "イナルナ",
   "contact": "nagafuku307@gmail.com",
-  "itch_url": "",
-  "itch_title": "RPG・パズル向け 効果音パック",
-  "itch_desc": "約10秒の長めの効果音を収録。演出やイベントシーンにそのまま使えます。",
+  "itch_url": "https://inaruna3565.itch.io/sfx-forge",
+  "itch_title": "SFX Forge — UI効果音デザイナー",
+  "itch_desc": "35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。",
   "updated": "2026-11-09",
   "privacy_established": "2026-11-09",
   "privacy_revised": "",
-  "index_description": "ゲーム開発者のための効果音・BGMの解説サイトです。Unity・Godotでの音の実装、BGMのループ計算、WAVとOGGの選び方、フリー素材の規約などを解説し、音量dB変換やループ長を計算できる無料ツールを公開しています。"
+  "index_description": "ゲーム開発者のための効果音・BGMの解説サイトです。Unity・Godotでの音の実装、BGMのループ計算、WAVとOGGの選び方、フリー素材の規約などを解説し、音量dB変換やループ長を計算できる無料ツールを公開しています。",
+  "itch_label": "当サイト運営者のツール（販売中）",
+  "itch_products": [
+    {
+      "name": "SFX Forge",
+      "url": "https://inaruna3565.itch.io/sfx-forge"
+    },
+    {
+      "name": "UI SFX Vol.1",
+      "url": "https://inaruna3565.itch.io/ui-sfx-vol-1"
+    },
+    {
+      "name": "UI SFX Vol.1 Lite",
+      "url": "https://inaruna3565.itch.io/ui-sfx-vol-1-lite"
+    }
+  ]
 }

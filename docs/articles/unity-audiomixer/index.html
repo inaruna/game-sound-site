@@ -18,12 +18,12 @@
 <nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
 </div></header>
 <main>
-<article><h1>Unity AudioMixerの使い方｜BGM・効果音の音量設定とポーズ時の切り替え</h1><div class="meta">公開日：2026-11-09</div><p>AudioMixerを使うと、BGM・効果音・ボイスなどの音量を、種類ごとにまとめて調整できます。オプション画面の音量設定や、ポーズ中にBGMをこもらせる演出も、AudioMixerがあれば簡単に作れます。</p>
+<article><h1>Unity AudioMixerの使い方｜BGM・効果音の音量設定とポーズ時の切り替え</h1><p class="pr">【PR】この記事には、当サイト運営者が販売している商品の紹介が含まれます。</p><div class="meta">公開日：2026-11-09</div><p>AudioMixerを使うと、BGM・効果音・ボイスなどの音量を、種類ごとにまとめて調整できます。オプション画面の音量設定や、ポーズ中にBGMをこもらせる演出も、AudioMixerがあれば簡単に作れます。</p>
 <p>※Unity 6（6000.0系）の公式ドキュメントで確認した内容です。</p>
 <h2>1. AudioMixerを作る</h2>
 <ol>
-<li>メニューの Window → Audio → Audio Mixer で、Audio Mixerウィンドウを開きます。</li>
-<li>左側の Mixers パネルの「＋」で、新しいAudioMixerを作ります。</li>
+<li>Audio Mixerウィンドウの Mixers パネル右上にある「＋」で、新しいAudioMixerを作ります。</li>
+<li>作ったAudioMixerアセットは、ダブルクリックするとAudio Mixerウィンドウで開けます。</li>
 <li>最初から「Master」グループがあります。</li>
 </ol>
 <h2>2. グループを分ける</h2>
@@ -69,12 +69,13 @@ public void Resume() { normal.TransitionTo(0.3f); }
 <li>Voiceグループに「Send」エフェクトを追加します。</li>
 <li>BGMグループに「Duck Volume」エフェクトを追加します。</li>
 <li>VoiceのSendの送り先にBGMのDuck Volumeを選び、Send Levelを0dBにします。</li>
-<li>Duck Volume の Threshold と Ratio で下げ幅を、Attack Time と Release Time で下げる・戻す速さを調整します。</li>
+<li>Duck Volume のパラメーターで、BGMを下げる量と、下げる・戻す速さを調整します。</li>
 </ol>
 <h2>よくあるトラブル</h2>
 <p><strong>音量が反映されない。</strong> AudioSourceのOutputにグループが設定されているか確認します。Noneのままだとミキサーを通りません。</p>
 <p><strong>起動直後に音量が戻る。</strong> <a href="../unity-volume-db/">Unityの音量をdBに変換する方法</a>の「よくある失敗」を参照してください。</p>
-<p><strong>効果音が重なって大きくなりすぎる。</strong> SEグループに「Compressor」エフェクトを入れて急な音量の跳ね上がりを抑える、同じ音の同時再生数を制限する、といった対策があります。</p></article>
+<p><strong>効果音が重なって大きくなりすぎる。</strong> SEグループに「Compressor」エフェクトを入れて急な音量の跳ね上がりを抑える、同じ音の同時再生数を制限する、といった対策があります。</p>
+<div class="boxwrap"><a class="box own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener"><span class="tag">当サイト運営者のツール（販売中）</span><strong>SFX Forge — UI効果音デザイナー</strong><span>35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。</span><span class="go">itch.ioで見る →</span></a></div></article>
 </main>
 <footer><div class="in">
 <p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>

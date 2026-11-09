@@ -22,7 +22,7 @@
 body{margin:0;background:var(--bg);color:var(--text);
   font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic UI",system-ui,sans-serif;line-height:1.7}
 .wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
-.pr{font-size:14px;color:var(--text);background:var(--bg);border-left:4px solid var(--accent);padding:6px 10px;margin:0 0 16px}
+.pr{font-size:14px;color:var(--text);background:var(--accent-soft);border-left:4px solid var(--accent);padding:6px 10px;margin:0 0 16px}
 h1{font-size:clamp(22px,4vw,30px);line-height:1.35;margin:0 0 8px}
 .lead{color:var(--muted);margin:0 0 24px}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
@@ -70,7 +70,7 @@ footer{margin-top:40px;font-size:12px;color:var(--muted)}
 <div class="wrap">
   <p style="margin:0 0 12px;font-size:14px"><a href="../../" style="color:var(--accent)">← ゲーム音のどうぐ箱</a></p>
   <h1>ゲーム音響計算機</h1>
-  
+  <p class="pr">【PR】このページには、当サイト運営者が販売している商品の紹介が含まれます。</p>
   <p class="lead">Unityの音量dB変換、BGMのループ長、音声ファイルの容量見積もりを、ブラウザだけで計算できます。入力した値はどこにも送信されません。</p>
 
   <div class="tabs" role="tablist">
@@ -162,6 +162,19 @@ public void SetVolume(float value)
     </div>
     <p class="note">WAVは44バイトのヘッダーを含む概算です。圧縮形式は固定ビットレート換算のため、実際のファイルは前後します。1KB＝1,024バイト、1MB＝1,024KBで表示しています。</p>
   </div>
+
+  <!-- Recommendations -->
+  <section class="block">
+    <h2>このツールと一緒に使いたい素材・道具</h2>
+    <div class="cards">
+      <!-- 自作SE: ITCH_URL -->
+      <a class="card own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener">
+        <div class="tag">当サイト運営者のツール（販売中）</div>
+        <strong>SFX Forge — UI効果音デザイナー</strong>
+        <span>35種類のUI操作の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。</span>
+      </a>
+    </div>
+  </section>
 
   <!-- FAQ -->
   <section class="block">

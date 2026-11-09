@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>BGMのループ長とループポイントの計算方法｜BPMからサンプル数まで｜ゲーム音のどうぐ箱</title>
-<meta name="description" content="BPM・拍子・小節数からBGMのループ長を秒とサンプル数で出す計算式を、BPM120・16小節の計算例つきで解説。ループがずれる3つの原因と、イントロ付きループをUnity・Godot 4で指定する方法も紹介します。無料の計算ツール付き。">
+<meta name="description" content="BPM・拍子・小節数からBGMのループ長を秒とサンプル数で出す計算式を、BPM120・16小節の計算例つきで解説。ループがずれる2つの原因と、イントロ付きループをUnity・Godot 4で指定する方法も紹介します。無料の計算ツール付き。">
 <link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/bgm-loop-calc/">
 <meta property="og:title" content="BGMのループ長とループポイントの計算方法｜BPMからサンプル数まで｜ゲーム音のどうぐ箱">
-<meta property="og:description" content="BPM・拍子・小節数からBGMのループ長を秒とサンプル数で出す計算式を、BPM120・16小節の計算例つきで解説。ループがずれる3つの原因と、イントロ付きループをUnity・Godot 4で指定する方法も紹介します。無料の計算ツール付き。">
+<meta property="og:description" content="BPM・拍子・小節数からBGMのループ長を秒とサンプル数で出す計算式を、BPM120・16小節の計算例つきで解説。ループがずれる2つの原因と、イントロ付きループをUnity・Godot 4で指定する方法も紹介します。無料の計算ツール付き。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/bgm-loop-calc/">
 <link rel="stylesheet" href="../../assets/style.css">
@@ -18,7 +18,7 @@
 <nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
 </div></header>
 <main>
-<article><h1>BGMのループ長とループポイントの計算方法｜BPMからサンプル数まで</h1><div class="meta">公開日：2026-11-09</div><p>ゲームのBGMは、同じ曲を途切れなく繰り返す「ループ再生」が基本です。ところが、ループ長を秒で適当に決めると、つなぎ目でプツッと音が鳴ったり、リズムが少しずつずれたりします。</p>
+<article><h1>BGMのループ長とループポイントの計算方法｜BPMからサンプル数まで</h1><p class="pr">【PR】この記事には、当サイト運営者が販売している商品の紹介が含まれます。</p><div class="meta">公開日：2026-11-09</div><p>ゲームのBGMは、同じ曲を途切れなく繰り返す「ループ再生」が基本です。ところが、ループ長を秒で適当に決めると、つなぎ目でプツッと音が鳴ったり、リズムが少しずつずれたりします。</p>
 <p>ずれないループを作るには、<strong>BPMから正確な長さを計算し、サンプル数で指定する</strong>のが確実です。</p>
 <div class="boxwrap"><a class="box toolbox" href="../../tools/game-audio-calc/"><span class="tag">無料ツール</span><strong>ゲーム音響計算機</strong><span>音量のdB変換、BGMのループ長、ファイルサイズをブラウザで計算できます。</span><span class="go">ツールを開く →</span></a></div>
 
@@ -57,10 +57,9 @@
 </tr>
 </tbody>
 </table>
-<h2>ループがずれる3つの原因</h2>
+<h2>ループがずれる2つの原因</h2>
 <p><strong>1. 秒数を丸めている。</strong> BPM135・4/4拍子・16小節のループ長は28.444…秒です。これを0.1秒単位の28.4秒に丸めると約44ミリ秒、整数の28秒に丸めると約444ミリ秒、ループの長さが本来とずれます。サンプル数で指定すれば、誤差は1サンプル未満です。</p>
 <p><strong>2. サンプルレートが違う。</strong> 44,100Hzで書き出したファイルを48,000Hz前提で指定すると、ループポイントがずれます。書き出し時とゲーム側の設定をそろえましょう。</p>
-<p><strong>3. MP3を使っている。</strong> MP3はエンコードの仕組み上、先頭と末尾に短い無音が入ることが多く、ループのつなぎ目に隙間ができやすくなります。ループするBGMには、OGGかWAVが向いています。</p>
 <h2>イントロ付きループの作り方</h2>
 <p>曲の頭にイントロがあり、2周目からはイントロを飛ばしたい場合は、「ループ開始位置」と「ループ終了位置」を別々に持ちます。</p>
 <ul>
@@ -72,7 +71,8 @@
 <p><strong>Unity：</strong> AudioSourceの標準機能では、ファイル全体のループしかできません。イントロ付きループは、<code>AudioSource.timeSamples</code> を監視してループ終了を超えたらループ開始に戻すか、イントロとループ部分を別ファイルにして <code>PlayScheduled</code> で順番に鳴らす方法が一般的です。</p>
 <p><strong>Godot 4：</strong> WAVファイルは、インポート設定でループモードとループ開始・終了をサンプル単位で指定できます。OGGはループの有効化とループ開始位置（秒）を設定できます。</p>
 <h2>まとめ</h2>
-<p>BPMが決まれば、ループ長は計算で決まります。秒ではなくサンプル数で指定すること、サンプルレートをそろえることの2点を守れば、つなぎ目の違和感はほぼなくなります。</p></article>
+<p>BPMが決まれば、ループ長は計算で決まります。秒ではなくサンプル数で指定すること、サンプルレートをそろえることの2点を守れば、つなぎ目の違和感はほぼなくなります。</p>
+<div class="boxwrap"><a class="box own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener"><span class="tag">当サイト運営者のツール（販売中）</span><strong>SFX Forge — UI効果音デザイナー</strong><span>35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。</span><span class="go">itch.ioで見る →</span></a></div></article>
 </main>
 <footer><div class="in">
 <p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>

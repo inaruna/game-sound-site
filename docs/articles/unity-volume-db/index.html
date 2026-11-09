@@ -18,7 +18,7 @@
 <nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
 </div></header>
 <main>
-<article><h1>Unityの音量をdBに変換する方法｜スライダーとAudioMixerをつなぐ</h1><div class="meta">公開日：2026-11-09</div><p>Unityで音量設定画面を作るとき、スライダーの値（0〜1）をそのままAudioMixerに渡すと、ほとんど音量が変わらなかったり、急に無音になったりします。原因は、<strong>AudioMixerの音量がdB（デシベル）単位</strong>だからです。</p>
+<article><h1>Unityの音量をdBに変換する方法｜スライダーとAudioMixerをつなぐ</h1><p class="pr">【PR】この記事には、当サイト運営者が販売している商品の紹介が含まれます。</p><div class="meta">公開日：2026-11-09</div><p>Unityで音量設定画面を作るとき、スライダーの値（0〜1）をそのままAudioMixerに渡すと、ほとんど音量が変わらなかったり、急に無音になったりします。原因は、<strong>AudioMixerの音量がdB（デシベル）単位</strong>だからです。</p>
 <p>この記事では、0〜1の値とdBの関係、変換のコード、つまずきやすい点を順に説明します。</p>
 <p>※Unity 6（6000.0系）の公式ドキュメントで確認した内容です。</p>
 <div class="boxwrap"><a class="box toolbox" href="../../tools/game-audio-calc/"><span class="tag">無料ツール</span><strong>ゲーム音響計算機</strong><span>音量のdB変換、BGMのループ長、ファイルサイズをブラウザで計算できます。</span><span class="go">ツールを開く →</span></a></div>
@@ -129,7 +129,7 @@ public class VolumeSlider : MonoBehaviour
     void Start()
     {
         float saved = PlayerPrefs.GetFloat(parameter, 0.8f);
-        // 値が同じだと OnValueChanged は呼ばれないため、明示的に適用する
+        // SetValueWithoutNotify は onValueChanged を呼ばないので、音量はここで明示的に適用する
         slider.SetValueWithoutNotify(saved);
         SetVolume(saved);
     }
@@ -143,7 +143,8 @@ public class VolumeSlider : MonoBehaviour
 }
 </code></pre>
 <h2>まとめ</h2>
-<p>AudioMixerはdB、スライダーはリニアです。間に <code>20 × log10</code> をはさむだけで、自然な音量スライダーになります。具体的な値を確かめたいときは、上の変換ツールを使ってください。</p></article>
+<p>AudioMixerはdB、スライダーはリニアです。間に <code>20 × log10</code> をはさむだけで、自然な音量スライダーになります。具体的な値を確かめたいときは、上の変換ツールを使ってください。</p>
+<div class="boxwrap"><a class="box own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener"><span class="tag">当サイト運営者のツール（販売中）</span><strong>SFX Forge — UI効果音デザイナー</strong><span>35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。</span><span class="go">itch.ioで見る →</span></a></div></article>
 </main>
 <footer><div class="in">
 <p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>

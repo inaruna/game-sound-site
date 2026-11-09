@@ -13,8 +13,8 @@ AudioMixerを使うと、BGM・効果音・ボイスなどの音量を、種類�
 
 ## 1. AudioMixerを作る
 
-1. メニューの Window → Audio → Audio Mixer で、Audio Mixerウィンドウを開きます。
-2. 左側の Mixers パネルの「＋」で、新しいAudioMixerを作ります。
+1. Audio Mixerウィンドウの Mixers パネル右上にある「＋」で、新しいAudioMixerを作ります。
+2. 作ったAudioMixerアセットは、ダブルクリックするとAudio Mixerウィンドウで開けます。
 3. 最初から「Master」グループがあります。
 
 ## 2. グループを分ける
@@ -75,7 +75,7 @@ public void Resume() { normal.TransitionTo(0.3f); }
 1. Voiceグループに「Send」エフェクトを追加します。
 2. BGMグループに「Duck Volume」エフェクトを追加します。
 3. VoiceのSendの送り先にBGMのDuck Volumeを選び、Send Levelを0dBにします。
-4. Duck Volume の Threshold と Ratio で下げ幅を、Attack Time と Release Time で下げる・戻す速さを調整します。
+4. Duck Volume のパラメーターで、BGMを下げる量と、下げる・戻す速さを調整します。
 
 ## よくあるトラブル
 
