@@ -1,13 +1,9 @@
 {
   "_説明": "発行したアフィリエイトリンクを \"\" の中に貼るだけです。空のままの枠はページに表示されません。",
-  "UNITY_AUDIO": "",
-  "AMAZON_HEADPHONE": "",
-  "AMAZON_HP_CD900ST": "",
-  "AMAZON_HP_M50X": "",
-  "AMAZON_AUDIO_IF": "",
-  "AMAZON_BOOK": "",
   "AMAZON_BOOK_SFX": "",
   "AMAZON_BOOK_SFX2": "",
   "AMAZON_BOOK_COMPOSE": "",
-  "AMAZON_BOOK_HISTORY": ""
+  "AMAZON_BOOK_HISTORY": "",
+  "AMAZON_HP_CD900ST": "",
+  "AMAZON_HP_M50X": ""
 }

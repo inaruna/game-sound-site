@@ -1,42 +1,27 @@
-# ゲーム音のどうぐ箱 — 公開までの手順
+# ゲーム音のどうぐ箱
 
-`docs` フォルダの中身が、そのまま公開できるサイトです（記事10本、無料ツール、トップ、運営者情報、プライバシーポリシー、sitemap.xml、robots.txt）。
+ゲーム開発者向けの、効果音・BGMの解説記事と無料計算ツールのサイトです。
 
-アフィリエイトリンクが空の枠は自動で非表示になるので、**今の状態でも公開できます**。Amazonアソシエイトの審査には公開済みのサイトが必要なので、先に公開してから申し込む流れになります。
+- 公開URL：https://inaruna.github.io/game-sound-site/
+- 公開方法：GitHub Pages（`main` ブランチの `/docs` フォルダ）
 
-## あなたがやること（最後の一手）
+## 仕組み
 
-1. **運営者情報を記入する**
-   `config.json` の `operator_name`（ハンドルネーム可）、`contact`（メールアドレスやフォームURL）、`itch_url`（効果音ページ）を埋めます。
-2. **サイトを公開する**（どちらか）
-   - Netlify Drop：`dist` フォルダをブラウザにドラッグするだけで公開されます。
-   - GitHub Pages：リポジトリを作り、`dist` の中身をアップロードして Pages を有効にします。
-3. **公開URLを記入する**
-   `config.json` の `site_url` を公開URLに書き換えます。
-4. **再ビルドしてアップロードし直す**
-   `python3 build.py` を実行し、新しい `dist` をアップロードします。Pythonを使わない場合は、記入した内容をClaudeに伝えれば再ビルドします。
-5. **Google Search Console に登録し、sitemap.xml を送信する**
-6. **アフィリエイトに申し込む**
-   - Amazonアソシエイト
-   - Unity Affiliate Program（Partnerize経由）
-7. **発行されたリンクを `links.json` に貼り、手順4をもう一度行う**
-   どのキーがどの商品かは、`links.json` のキー名で判別できます（例：`AMAZON_HP_M50X` は ATH-M50x）。Amazonのリンクが1つでも入ると、フッターにAmazonアソシエイトの表記が自動で入ります。
-
-## フォルダ構成
+`python3 build.py`（要 `pip install markdown`）を実行すると、原稿と設定から `docs/` にサイトが生成されます。`docs/` はビルドのたびに作り直されるため、直接編集しません。
 
 | パス | 中身 |
 | --- | --- |
-| `config.json` | サイト名、URL、運営者情報、itchのURL |
-| `links.json` | アフィリエイトリンク |
-| `content/articles/*.md` | 記事（Markdown） |
-| `tools/game-audio-calc.html` | 無料ツール |
-| `build.py` | サイトを生成するスクリプト（要 `pip install markdown`） |
-| `docs/` | 生成されたサイト（これを公開する） |
+| `config.json` | サイト名、URL、運営者名、連絡先、itch.ioのURL |
+| `links.json` | アフィリエイトリンク（空の枠はページに表示されません） |
+| `content/articles/*.md` | 記事の原稿。`draft: true` の記事は公開されません |
+| `tools/game-audio-calc.html` | 無料の計算ツール |
+| `EDITORIAL.md` | 編集体制と公開の基準 |
+| `docs/` | 生成されたサイト（GitHub Pages が公開） |
 
-## 記事の書き方メモ
+## 記事の原稿で使える記号
 
-記事中で使える置き換え記号です。
-
-- `[[tool]]` … 無料ツールへの誘導枠
-- `[[itch]]` … 自作の効果音パックへの誘導枠（`itch_url` が空なら非表示）
+- `[[tool]]` … 計算ツールへの誘導枠
+- `[[itch]]` … 運営者の効果音素材への誘導枠（`itch_url` が空なら非表示）
 - `[[aff:キー|商品名|説明]]` … アフィリエイト枠（`links.json` のキーが空なら非表示）
+
+アフィリエイト枠や運営者の素材の枠があるページには、ページ冒頭に「【PR】」の表示が自動で入ります。

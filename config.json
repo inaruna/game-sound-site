@@ -7,5 +7,8 @@
   "itch_url": "",
   "itch_title": "RPG・パズル向け 効果音パック",
   "itch_desc": "約10秒の長めの効果音を収録。演出やイベントシーンにそのまま使えます。",
-  "updated": "2026-11-09"
+  "updated": "2026-11-09",
+  "privacy_established": "2026-11-09",
+  "privacy_revised": "",
+  "index_description": "ゲーム開発者のための効果音・BGMの解説サイトです。Unity・Godotでの音の実装、BGMのループ計算、WAVとOGGの選び方、フリー素材の規約などを解説し、音量dB変換やループ長を計算できる無料ツールを公開しています。"
 }

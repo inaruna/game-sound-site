@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Unity AudioMixerの使い方｜BGM・SE別の音量設定とポーズ時の切り替え｜ゲーム音のどうぐ箱</title>
-<meta name="description" content="UnityのAudioMixerでBGMと効果音の音量を分けて管理する方法を、グループの作り方、パラメーターの公開、Snapshot、ダッキングの順に解説します。">
+<title>Unity AudioMixerの使い方｜BGM・効果音の音量設定とポーズ時の切り替え｜ゲーム音のどうぐ箱</title>
+<meta name="description" content="UnityのAudioMixerでBGM・効果音・ボイスの音量を分けて管理する方法を、グループの作り方、Exposeしたパラメーターの変更、Snapshotでのポーズ演出、ダッキングの順に解説します。C#のコードと、よくあるトラブルの対処付き。">
 <link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/unity-audiomixer/">
-<meta property="og:title" content="Unity AudioMixerの使い方｜BGM・SE別の音量設定とポーズ時の切り替え｜ゲーム音のどうぐ箱">
-<meta property="og:description" content="UnityのAudioMixerでBGMと効果音の音量を分けて管理する方法を、グループの作り方、パラメーターの公開、Snapshot、ダッキングの順に解説します。">
+<meta property="og:title" content="Unity AudioMixerの使い方｜BGM・効果音の音量設定とポーズ時の切り替え｜ゲーム音のどうぐ箱">
+<meta property="og:description" content="UnityのAudioMixerでBGM・効果音・ボイスの音量を分けて管理する方法を、グループの作り方、Exposeしたパラメーターの変更、Snapshotでのポーズ演出、ダッキングの順に解説します。C#のコードと、よくあるトラブルの対処付き。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/unity-audiomixer/">
 <link rel="stylesheet" href="../../assets/style.css">
@@ -18,11 +18,12 @@
 <nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
 </div></header>
 <main>
-<article><h1>Unity AudioMixerの使い方｜BGM・SE別の音量設定とポーズ時の切り替え</h1><div class="meta">更新日：2026-11-09</div><p>AudioMixerを使うと、BGM・効果音・ボイスなどの音量を、種類ごとにまとめて調整できます。オプション画面の音量設定や、ポーズ中にBGMをこもらせる演出も、AudioMixerがあれば簡単に作れます。</p>
+<article><h1>Unity AudioMixerの使い方｜BGM・効果音の音量設定とポーズ時の切り替え</h1><div class="meta">公開日：2026-11-09</div><p>AudioMixerを使うと、BGM・効果音・ボイスなどの音量を、種類ごとにまとめて調整できます。オプション画面の音量設定や、ポーズ中にBGMをこもらせる演出も、AudioMixerがあれば簡単に作れます。</p>
+<p>※Unity 6（6000.0系）の公式ドキュメントで確認した内容です。</p>
 <h2>1. AudioMixerを作る</h2>
 <ol>
-<li>Projectウィンドウで右クリックし、Create → Audio Mixer を選びます。</li>
-<li>ダブルクリックでAudio Mixerウィンドウを開きます。</li>
+<li>メニューの Window → Audio → Audio Mixer で、Audio Mixerウィンドウを開きます。</li>
+<li>左側の Mixers パネルの「＋」で、新しいAudioMixerを作ります。</li>
 <li>最初から「Master」グループがあります。</li>
 </ol>
 <h2>2. グループを分ける</h2>
@@ -46,29 +47,33 @@
 <h2>4. Snapshotでポーズ中の音を切り替える</h2>
 <p>Snapshotは、ミキサー全体の状態を保存しておく機能です。</p>
 <ol>
+<li>最初からあるSnapshot（名前は「Snapshot」）を「Normal」に改名します。</li>
 <li>Snapshotsの「＋」で「Paused」を作ります。</li>
-<li>Pausedを選んだ状態で、BGMグループに「Lowpass」エフェクトを追加し、Cutoffを下げます。</li>
+<li>BGMグループに「Lowpass」エフェクトを追加します。エフェクトはすべてのSnapshotに共通で、Snapshotごとに持つのは値だけです。</li>
+<li>Normalを選び、Cutoffを22000Hz（音がこもらない値）にします。</li>
+<li>Pausedを選び、Cutoffを下げます（例：800Hz）。</li>
 <li>スクリプトから切り替えます。</li>
 </ol>
-<pre><code class="language-csharp">[SerializeField] AudioMixerSnapshot normal;
+<pre><code class="language-csharp">// クラスの中に書く断片です（ファイルの先頭に using UnityEngine.Audio; が必要）
+[SerializeField] AudioMixerSnapshot normal;
 [SerializeField] AudioMixerSnapshot paused;
 
 public void Pause()  { paused.TransitionTo(0.3f); }
 public void Resume() { normal.TransitionTo(0.3f); }
 </code></pre>
-<p><code>TransitionTo</code> の引数は切り替えにかける秒数です。<code>Time.timeScale = 0</code> でポーズする場合は、AudioMixerのInspectorで Update Mode を「Unscaled Time」にしておかないと、切り替えが進みません。</p>
-<p><strong>注意：</strong> スクリプトに公開したパラメーターは、Snapshotでは変わらなくなります。オプションの音量はExposeして SetFloat で、演出用の変化はSnapshotで、と役割を分けると混乱しません。</p>
+<p><code>TransitionTo</code> の引数は切り替えにかける秒数です。<code>Time.timeScale = 0</code> でポーズする場合は、AudioMixerの Update Mode を Unscaled Time にしておく必要があります。スクリプトからは <code>mixer.updateMode = AudioMixerUpdateMode.UnscaledTime;</code> で設定できます。</p>
+<p><strong>注意：</strong> Exposeしたパラメーターは、一度 SetFloat で値を設定すると、Snapshotを切り替えても変わらなくなります（ClearFloat で元に戻せます）。オプションの音量は SetFloat で、演出用の変化はSnapshotで、と役割を分けると混乱しません。</p>
 <h2>5. ダッキングでボイス中にBGMを下げる</h2>
 <p>キャラクターのボイスが鳴っている間だけBGMを下げたいときは、ダッキングを使います。</p>
 <ol>
 <li>Voiceグループに「Send」エフェクトを追加します。</li>
 <li>BGMグループに「Duck Volume」エフェクトを追加します。</li>
 <li>VoiceのSendの送り先にBGMのDuck Volumeを選び、Send Levelを0dBにします。</li>
-<li>Duck VolumeのThresholdやRatioで、下げ幅と反応の速さを調整します。</li>
+<li>Duck Volume の Threshold と Ratio で下げ幅を、Attack Time と Release Time で下げる・戻す速さを調整します。</li>
 </ol>
 <h2>よくあるトラブル</h2>
 <p><strong>音量が反映されない。</strong> AudioSourceのOutputにグループが設定されているか確認します。Noneのままだとミキサーを通りません。</p>
-<p><strong>起動直後に音量が戻る。</strong> 保存した音量の復元を Awake で行うと反映されないことがあります。Start で行いましょう。</p>
+<p><strong>起動直後に音量が戻る。</strong> <a href="../unity-volume-db/">Unityの音量をdBに変換する方法</a>の「よくある失敗」を参照してください。</p>
 <p><strong>効果音が重なって大きくなりすぎる。</strong> SEグループに「Compressor」エフェクトを入れて急な音量の跳ね上がりを抑える、同じ音の同時再生数を制限する、といった対策があります。</p></article>
 </main>
 <footer><div class="in">

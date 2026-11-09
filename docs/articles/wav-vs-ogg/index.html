@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ゲームの効果音はWAVとOGGどっち？容量とUnityの設定で決める｜ゲーム音のどうぐ箱</title>
-<meta name="description" content="ゲームに入れる効果音・BGMの形式をWAVとOGGのどちらにするか、容量の違いとUnityのインポート設定から整理しました。容量計算ツール付き。">
+<meta name="description" content="ゲームの効果音・BGMをWAVとOGGのどちらで入れるかを、容量の計算例とUnityのCompression Format・Load Typeの設定から整理しました。Godot 4での扱い、モノラル化やサンプルレートで容量を減らす方法も紹介。容量計算ツール付き。">
 <link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/wav-vs-ogg/">
 <meta property="og:title" content="ゲームの効果音はWAVとOGGどっち？容量とUnityの設定で決める｜ゲーム音のどうぐ箱">
-<meta property="og:description" content="ゲームに入れる効果音・BGMの形式をWAVとOGGのどちらにするか、容量の違いとUnityのインポート設定から整理しました。容量計算ツール付き。">
+<meta property="og:description" content="ゲームの効果音・BGMをWAVとOGGのどちらで入れるかを、容量の計算例とUnityのCompression Format・Load Typeの設定から整理しました。Godot 4での扱い、モノラル化やサンプルレートで容量を減らす方法も紹介。容量計算ツール付き。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/wav-vs-ogg/">
 <link rel="stylesheet" href="../../assets/style.css">
@@ -18,7 +18,8 @@
 <nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
 </div></header>
 <main>
-<article><h1>ゲームの効果音はWAVとOGGどっち？容量とUnityの設定で決める</h1><div class="meta">更新日：2026-11-09</div><p>効果音をWAVにするかOGGにするかで迷ったら、結論は「<strong>素材はWAVで持ち、ゲームエンジン側で圧縮を決める</strong>」です。理由と、具体的な設定の目安を説明します。</p>
+<article><h1>ゲームの効果音はWAVとOGGどっち？容量とUnityの設定で決める</h1><div class="meta">公開日：2026-11-09</div><p>効果音をWAVにするかOGGにするかで迷ったら、結論は「<strong>素材はWAVで持ち、ゲームエンジン側で圧縮を決める</strong>」です。理由と、具体的な設定の目安を説明します。</p>
+<p>※Unity 6（6000.0系）の公式ドキュメントで確認した内容です。</p>
 <div class="boxwrap"><a class="box toolbox" href="../../tools/game-audio-calc/"><span class="tag">無料ツール</span><strong>ゲーム音響計算機</strong><span>音量のdB変換、BGMのループ長、ファイルサイズをブラウザで計算できます。</span><span class="go">ツールを開く →</span></a></div>
 
 <h2>WAVとOGGの違い</h2>
@@ -39,7 +40,7 @@
 <tr>
 <td>容量</td>
 <td>大きい</td>
-<td>WAVの約1/10</td>
+<td>128kbpsならWAVの約1/11</td>
 </tr>
 <tr>
 <td>音質</td>
@@ -58,9 +59,9 @@
 </tr>
 </tbody>
 </table>
-<p>44.1kHz・16bit・ステレオのWAVは、1秒あたり約172KBです。10秒の効果音を50本入れると約84MBになります。同じものを128kbpsのOGGにすると、約7.6MBまで小さくなります。</p>
+<p>44.1kHz・16bit・ステレオのWAVは、1秒あたり約172KBです（1KB＝1,024バイトで換算）。10秒の効果音を50本入れると約84MBになります。同じものを128kbpsのOGGにすると、約7.6MBまで小さくなります。</p>
 <h2>Unityでは元ファイルの形式は最終サイズに関係しない</h2>
-<p>Unityは、取り込んだ音声ファイルをビルド時に再エンコードします。最終的なサイズと音質を決めるのは、元ファイルの形式ではなく、AudioClipの<strong>インポート設定</strong>です。</p>
+<p>Unityは、音声ファイルを取り込む（インポートする）ときに再エンコードします。最終的なサイズと音質を決めるのは、元ファイルの形式ではなく、AudioClipの<strong>インポート設定</strong>です。</p>
 <p>だからこそ、元ファイルは劣化のないWAVで入れておくのが有利です。OGGを入れてVorbisで再圧縮すると、圧縮が二重にかかって音質が落ちます。</p>
 <h3>Compression Format</h3>
 <table>
@@ -118,7 +119,7 @@
 </table>
 <p>迷ったら、短い効果音は「ADPCM＋Decompress On Load」、BGMは「Vorbis＋Streaming」から始めると無難です。</p>
 <h2>Godotの場合</h2>
-<p>Godot 4では、WAVはインポート時に圧縮方式を選べます。OGG VorbisやMP3は、ファイルがそのまま使われます。効果音はWAV、BGMはOGGで入れるのが一般的です。</p>
+<p>Godot 4では、WAVはインポート時に圧縮方式（PCM、IMA ADPCM、QOA）を選べます。公式ドキュメントでは、WAVは再生の負荷が軽いため効果音に、Ogg Vorbisは容量が小さいため音楽に向くとされています。</p>
 <h2>サンプルレートとモノラル化</h2>
 <p>容量を減らしたいときは、形式より先に次の2つを見直すと効果的です。</p>
 <ul>

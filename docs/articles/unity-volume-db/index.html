@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Unityの音量をdBに変換する方法｜スライダーとAudioMixerを正しくつなぐ｜ゲーム音のどうぐ箱</title>
-<meta name="description" content="UnityのAudioSource.volume（0〜1）とAudioMixerのdBの関係、スライダー値をdBに変換するコード、ありがちな失敗をまとめました。変換ツール付き。">
+<title>Unityの音量をdBに変換する方法｜スライダーとAudioMixerをつなぐ｜ゲーム音のどうぐ箱</title>
+<meta name="description" content="UnityのAudioSource.volume（0〜1）とAudioMixerのdBの関係を、変換式と早見表で解説します。スライダー値をdBに変換するC#コード、PlayerPrefsでの保存と復元、ありがちな失敗もまとめました。無料の変換ツール付き。">
 <link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/unity-volume-db/">
-<meta property="og:title" content="Unityの音量をdBに変換する方法｜スライダーとAudioMixerを正しくつなぐ｜ゲーム音のどうぐ箱">
-<meta property="og:description" content="UnityのAudioSource.volume（0〜1）とAudioMixerのdBの関係、スライダー値をdBに変換するコード、ありがちな失敗をまとめました。変換ツール付き。">
+<meta property="og:title" content="Unityの音量をdBに変換する方法｜スライダーとAudioMixerをつなぐ｜ゲーム音のどうぐ箱">
+<meta property="og:description" content="UnityのAudioSource.volume（0〜1）とAudioMixerのdBの関係を、変換式と早見表で解説します。スライダー値をdBに変換するC#コード、PlayerPrefsでの保存と復元、ありがちな失敗もまとめました。無料の変換ツール付き。">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/unity-volume-db/">
 <link rel="stylesheet" href="../../assets/style.css">
@@ -18,8 +18,9 @@
 <nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
 </div></header>
 <main>
-<article><h1>Unityの音量をdBに変換する方法｜スライダーとAudioMixerを正しくつなぐ</h1><div class="meta">更新日：2026-11-09</div><p>Unityで音量設定画面を作るとき、スライダーの値（0〜1）をそのままAudioMixerに渡すと、ほとんど音量が変わらなかったり、急に無音になったりします。原因は、<strong>AudioMixerの音量がdB（デシベル）単位</strong>だからです。</p>
+<article><h1>Unityの音量をdBに変換する方法｜スライダーとAudioMixerをつなぐ</h1><div class="meta">公開日：2026-11-09</div><p>Unityで音量設定画面を作るとき、スライダーの値（0〜1）をそのままAudioMixerに渡すと、ほとんど音量が変わらなかったり、急に無音になったりします。原因は、<strong>AudioMixerの音量がdB（デシベル）単位</strong>だからです。</p>
 <p>この記事では、0〜1の値とdBの関係、変換のコード、つまずきやすい点を順に説明します。</p>
+<p>※Unity 6（6000.0系）の公式ドキュメントで確認した内容です。</p>
 <div class="boxwrap"><a class="box toolbox" href="../../tools/game-audio-calc/"><span class="tag">無料ツール</span><strong>ゲーム音響計算機</strong><span>音量のdB変換、BGMのループ長、ファイルサイズをブラウザで計算できます。</span><span class="go">ツールを開く →</span></a></div>
 
 <h2>AudioSourceとAudioMixerで単位が違う</h2>
@@ -109,22 +110,36 @@ public class VolumeSlider : MonoBehaviour
 </code></pre>
 <p><code>Mathf.Max(value, 0.0001f)</code> は、log10(0) がマイナス無限大になるのを防ぐためのものです。0.0001はちょうど-80dBにあたり、AudioMixerの最小値と一致します。</p>
 <h2>よくある失敗</h2>
-<p><strong>スライダーの値をそのまま渡している。</strong> 0〜1をdBとして渡すと、0dB付近の1dBしか動かないので、ほぼ変化を感じません。</p>
-<p><strong>-80〜0をスライダーで直接動かしている。</strong> 数値上は正しくても、体感では右半分でしか音量が変わりません。人の耳は対数的に聞こえるので、リニアのスライダーを上の式で変換するほうが自然な手触りになります。</p>
-<p><strong>Awakeで設定を復元している。</strong> AudioMixer.SetFloat は Awake の時点では反映されないことがあります。保存した音量の復元は Start で行うと確実です。</p>
-<p><strong>Snapshotの切り替えで上書きされる。</strong> Exposeしたパラメーターは、Snapshotの値より SetFloat の値が優先されます。逆に、Snapshotで音量を変えたいなら、そのパラメーターはExposeしないほうが扱いやすくなります。</p>
+<p><strong>スライダーの値をそのまま渡している。</strong> 0〜1をそのままdBとして渡すと、0〜+1dBの範囲しか動かないため、ほぼ変化を感じません。</p>
+<p><strong>-80〜0のdBをスライダーで直接動かしている。</strong> -80〜-40dB付近はほとんど聞こえないため、スライダーの左半分を動かしても音がほぼ変わりません。0〜1のスライダーを上の式で変換すると、よく使う-20〜0dBの範囲にスライダーの9割が割り当てられ、操作しやすくなります。</p>
+<p><strong>Awakeで設定を復元している。</strong> AudioMixer.SetFloat は、Awake や OnEnable で呼ぶと反映されないことがあります。保存した音量の復元は Start で行いましょう。</p>
+<p><strong>ExposeしたパラメーターをSnapshotでも動かそうとしている。</strong> Exposeしたパラメーターは、一度 SetFloat で値を設定すると、Snapshotを切り替えても変わらなくなります（ClearFloat で元に戻せます）。Snapshotで音量を変えたいなら、そのパラメーターは SetFloat で操作しないほうが扱いやすくなります。</p>
 <h2>音量の保存と復元</h2>
-<p>PlayerPrefsにはdBではなく、スライダーの値（0〜1）を保存しておくと、UIの復元とdB変換を同じ処理で済ませられます。</p>
-<pre><code class="language-csharp">void Start()
-{
-    float saved = PlayerPrefs.GetFloat(parameter, 0.8f);
-    slider.value = saved;   // OnValueChanged 経由で SetVolume が呼ばれる
-}
+<p>PlayerPrefsにはdBではなく、スライダーの値（0〜1）を保存しておくと、UIの復元とdB変換を同じ処理で済ませられます。上の <code>VolumeSlider</code> を、保存と復元まで含めて書き直すと次のようになります。</p>
+<pre><code class="language-csharp">using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.UI;
 
-public void SetVolume(float value)
+public class VolumeSlider : MonoBehaviour
 {
-    mixer.SetFloat(parameter, Mathf.Log10(Mathf.Max(value, 0.0001f)) * 20f);
-    PlayerPrefs.SetFloat(parameter, value);
+    [SerializeField] AudioMixer mixer;
+    [SerializeField] Slider slider;
+    [SerializeField] string parameter = &quot;BGMVolume&quot;;
+
+    void Start()
+    {
+        float saved = PlayerPrefs.GetFloat(parameter, 0.8f);
+        // 値が同じだと OnValueChanged は呼ばれないため、明示的に適用する
+        slider.SetValueWithoutNotify(saved);
+        SetVolume(saved);
+    }
+
+    // UI Slider の OnValueChanged に登録する
+    public void SetVolume(float value)
+    {
+        mixer.SetFloat(parameter, Mathf.Log10(Mathf.Max(value, 0.0001f)) * 20f);
+        PlayerPrefs.SetFloat(parameter, value);
+    }
 }
 </code></pre>
 <h2>まとめ</h2>
