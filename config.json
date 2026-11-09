@@ -6,7 +6,7 @@
   "contact": "nagafuku307@gmail.com",
   "itch_url": "https://inaruna3565.itch.io/sfx-forge",
   "itch_title": "SFX Forge — UI効果音デザイナー",
-  "itch_desc": "35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。",
+  "itch_desc": "35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます（効果音集としての再配布はできません）。",
   "updated": "2026-11-09",
   "privacy_established": "2026-11-09",
   "privacy_revised": "",
@@ -16,14 +16,6 @@
     {
       "name": "SFX Forge",
       "url": "https://inaruna3565.itch.io/sfx-forge"
-    },
-    {
-      "name": "UI SFX Vol.1",
-      "url": "https://inaruna3565.itch.io/ui-sfx-vol-1"
-    },
-    {
-      "name": "UI SFX Vol.1 Lite",
-      "url": "https://inaruna3565.itch.io/ui-sfx-vol-1-lite"
     }
   ]
 }

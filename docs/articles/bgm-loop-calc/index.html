@@ -25,7 +25,7 @@
 <h2>ループ長の計算式</h2>
 <p>1拍の長さは、60秒をBPMで割った値です。ここでのBPMは、多くのDAWと同じく四分音符を1拍とする値です。そこから小節、ループ全体へと掛け算していきます。</p>
 <pre><code>1拍（秒）   = 60 ÷ BPM
-1小節（秒） = 1拍 × 拍子の拍数
+1小節（秒）= 1拍 × 1小節に入る四分音符の数（4/4なら4、3/4なら3、6/8なら3、7/8なら3.5）
 ループ長（秒）= 1小節 × 小節数
 サンプル数   = ループ長 × サンプルレート
 </code></pre>
@@ -74,7 +74,7 @@
 <p>BPMが決まれば、ループ長は計算で決まります。秒ではなくサンプル数で指定すること、サンプルレートをそろえることの2点を守れば、つなぎ目の違和感はほぼなくなります。</p>
 <div class="boxwrap"><div class="box"><span class="tag">広告</span><strong>ゲームサウンド制作ガイド</strong><span>インタラクティブな音楽の作曲技法を、ゲーム音楽の作曲家が解説した本です。</span><span class="btns"><a class="btn" href="https://hb.afl.rakuten.co.jp/hgc/594cf9a3.5e00a8c3.594cf9a4.9a7e5c2a/?pc=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F9784873117294%2F&amp;m=https%3A%2F%2Fsearch.rakuten.co.jp%2Fsearch%2Fmall%2F9784873117294%2F" target="_blank" rel="sponsored noopener">楽天市場で見る →</a></span></div></div>
 
-<div class="boxwrap"><a class="box own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener"><span class="tag">当サイト運営者のツール（販売中）</span><strong>SFX Forge — UI効果音デザイナー</strong><span>35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます。</span><span class="go">itch.ioで見る →</span></a></div></article>
+<div class="boxwrap"><a class="box own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener"><span class="tag">当サイト運営者のツール（販売中）</span><strong>SFX Forge — UI効果音デザイナー</strong><span>35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます（効果音集としての再配布はできません）。</span><span class="go">itch.ioで見る →</span></a></div></article>
 </main>
 <footer><div class="in">
 <p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>

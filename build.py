@@ -235,7 +235,7 @@ def build():
             f'<tr><th>運営者</th><td>{op}</td></tr><tr><th>連絡先</th><td>{ct}</td></tr>'
             f'<tr><th>内容</th><td>{esc(CFG["site_description"])}</td></tr></table>'
             '<p>当サイトは、ゲーム用の効果音素材と制作ツールを販売している個人が運営しています。'
-            '記事内で紹介する運営者自身の商品には「当サイト運営者の〇〇（販売中）」と表示しています。</p>'
+            '記事内で紹介する運営者自身の商品には、「当サイト運営者のツール（販売中）」のように表示しています。</p>'
             + ('<p>販売中の商品（itch.io）：' + '、'.join(f'<a href="{esc(x["url"])}" target="_blank" rel="noopener">{esc(x["name"])}</a>' for x in CFG.get("itch_products", [])) + '</p>' if CFG.get("itch_products") else "")
             + '<p>当サイトはアフィリエイトプログラムで収入を得ることがあります。紹介する商品は、公式の仕様や出版社の情報をもとに選んでおり、'
             '実際に使っていない商品を体験談として紹介することはありません。</p>')
