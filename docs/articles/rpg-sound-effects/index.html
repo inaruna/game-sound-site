@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RPGに必要な効果音リストと素材の選び方｜ゲーム音のどうぐ箱</title>
+<meta name="description" content="RPGを作るときに必要になる効果音を場面ごとに一覧化し、素材を選ぶときのチェックポイントをまとめました。">
+<link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/rpg-sound-effects/">
+<meta property="og:title" content="RPGに必要な効果音リストと素材の選び方｜ゲーム音のどうぐ箱">
+<meta property="og:description" content="RPGを作るときに必要になる効果音を場面ごとに一覧化し、素材を選ぶときのチェックポイントをまとめました。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/rpg-sound-effects/">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+<a class="logo" href="../../">ゲーム音のどうぐ箱</a>
+<nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
+</div></header>
+<main>
+<article><h1>RPGに必要な効果音リストと素材の選び方</h1><div class="meta">更新日：2026-11-09</div><p>RPGは、ほかのジャンルに比べて必要な効果音の種類が多いゲームです。メニュー操作、戦闘、魔法、フィールドの環境音まで、足りない音があるとそこだけ手触りが軽くなってしまいます。</p>
+<p>この記事では、RPGで使う効果音を場面ごとに洗い出し、素材を選ぶときのポイントを紹介します。</p>
+<h2>場面別・RPGの効果音リスト</h2>
+<h3>システム・メニュー</h3>
+<table>
+<thead>
+<tr>
+<th>音</th>
+<th>使う場面</th>
+<th>長さの目安</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>カーソル移動</td>
+<td>メニューの選択</td>
+<td>0.1秒前後</td>
+</tr>
+<tr>
+<td>決定</td>
+<td>項目の決定</td>
+<td>0.2〜0.4秒</td>
+</tr>
+<tr>
+<td>キャンセル</td>
+<td>戻る</td>
+<td>0.2〜0.4秒</td>
+</tr>
+<tr>
+<td>ブザー</td>
+<td>選べない項目</td>
+<td>0.3秒前後</td>
+</tr>
+<tr>
+<td>セーブ</td>
+<td>セーブ完了</td>
+<td>0.5〜1秒</td>
+</tr>
+<tr>
+<td>アイテム入手</td>
+<td>宝箱、イベント</td>
+<td>1〜2秒</td>
+</tr>
+</tbody>
+</table>
+<p>カーソル音は何百回も聞く音です。耳に刺さらない、短くて柔らかい音を選びましょう。</p>
+<h3>戦闘</h3>
+<ul>
+<li>物理攻撃（斬撃、打撃、刺突）</li>
+<li>被ダメージ、回避、ミス</li>
+<li>回復</li>
+<li>状態異常（毒、睡眠、麻痺など）</li>
+<li>敵の消滅、逃走</li>
+<li>レベルアップ、勝利</li>
+</ul>
+<p>攻撃音は武器の種類ごとに用意すると、同じ「攻撃」コマンドでも違いが出ます。</p>
+<h3>魔法・スキル</h3>
+<p>炎、氷、雷、風、光、闇の6系統をそろえると、多くのRPGで使い回せます。魔法の効果音は、エフェクト（画面の演出）の長さに合わせる必要があるので、<strong>短い版と長い版の両方があると便利</strong>です。</p>
+<h3>フィールド・環境音</h3>
+<ul>
+<li>足音（土、石、草、木の床）</li>
+<li>扉の開閉、宝箱</li>
+<li>環境音（風、川、雨、たき火、洞窟）</li>
+</ul>
+<p>環境音は数秒から10秒程度のループ素材が向いています。短すぎると繰り返しが耳につきます。</p>
+<h2>素材を選ぶときのチェックポイント</h2>
+<p><strong>音量がそろっているか。</strong> 別々のサイトから集めた素材は、音量の基準がばらばらです。ゲームに入れてから調整し直す手間がかかります。同じ作者のパックでそろえると、この手間が減ります。</p>
+<p><strong>長さを調整しやすいか。</strong> 魔法や環境音は、演出に合わせて切ったりループさせたりします。余韻が自然に消えている素材、ループを前提に作られた素材が扱いやすいです。</p>
+<p><strong>ファイル形式。</strong> 短いシステム音はWAV、長い環境音はOGGが一般的です。両方入っている素材なら、変換の手間がかかりません。</p>
+<p><strong>利用規約。</strong> 商用利用、クレジット表記、ゲームへの組み込み、再配布の禁止を確認します。詳しくは<a href="../free-sfx-commercial/">フリー効果音を商用ゲームで使うときの規約の見方</a>にまとめています。</p>
+<h2>長めの効果音が役立つ場面</h2>
+<p>RPGでは、0.5秒程度の短い音だけでなく、<strong>数秒〜10秒程度の長めの効果音</strong>が欲しくなる場面があります。</p>
+<ul>
+<li>ボス戦前の不穏な演出</li>
+<li>大魔法の詠唱から発動まで</li>
+<li>場面転換、ワープ、回想への切り替え</li>
+<li>イベントシーンの環境音</li>
+</ul>
+<p>こうした音は、短い音を並べるより、最初から長さを想定して作られた素材のほうが自然につながります。</p></article>
+</main>
+<footer><div class="in">
+<p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>
+
+<p>&copy; 2026 ゲーム音のどうぐ箱</p>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Godot 4で効果音を鳴らす方法｜AudioStreamPlayerとバスの基本｜ゲーム音のどうぐ箱</title>
+<meta name="description" content="Godot 4で効果音やBGMを鳴らす方法を、AudioStreamPlayerの使い分け、同時再生、バスでの音量管理まで、GDScriptのコード付きで解説します。">
+<link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/godot-sound/">
+<meta property="og:title" content="Godot 4で効果音を鳴らす方法｜AudioStreamPlayerとバスの基本｜ゲーム音のどうぐ箱">
+<meta property="og:description" content="Godot 4で効果音やBGMを鳴らす方法を、AudioStreamPlayerの使い分け、同時再生、バスでの音量管理まで、GDScriptのコード付きで解説します。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/godot-sound/">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+<a class="logo" href="../../">ゲーム音のどうぐ箱</a>
+<nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
+</div></header>
+<main>
+<article><h1>Godot 4で効果音を鳴らす方法｜AudioStreamPlayerとバスの基本</h1><div class="meta">更新日：2026-11-09</div><p>Godot 4では、音を鳴らすのに「AudioStreamPlayer」系のノードを使います。基本は、ノードに音声ファイルを設定して <code>play()</code> を呼ぶだけです。</p>
+<p>この記事では、3種類のプレイヤーの使い分け、効果音を重ねて鳴らす方法、バスを使った音量管理を順に説明します。</p>
+<h2>3種類のAudioStreamPlayer</h2>
+<table>
+<thead>
+<tr>
+<th>ノード</th>
+<th>特徴</th>
+<th>使う場面</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AudioStreamPlayer</td>
+<td>位置に関係なく同じ音量で鳴る</td>
+<td>BGM、UI音</td>
+</tr>
+<tr>
+<td>AudioStreamPlayer2D</td>
+<td>2D空間の位置で音量と左右が変わる</td>
+<td>2Dゲームの効果音</td>
+</tr>
+<tr>
+<td>AudioStreamPlayer3D</td>
+<td>3D空間の位置と距離で変わる</td>
+<td>3Dゲームの効果音</td>
+</tr>
+</tbody>
+</table>
+<h2>基本の鳴らし方</h2>
+<ol>
+<li>シーンに AudioStreamPlayer を追加します。</li>
+<li>Inspectorの「Stream」に音声ファイルをドラッグします。</li>
+<li>スクリプトから <code>play()</code> を呼びます。</li>
+</ol>
+<pre><code class="language-gdscript">@onready var se_jump: AudioStreamPlayer = $SeJump
+
+func _physics_process(delta):
+    if Input.is_action_just_pressed(&quot;jump&quot;):
+        se_jump.play()
+</code></pre>
+<p>BGMのように最初から流したい場合は、Inspectorの「Autoplay」をオンにします。</p>
+<h2>同じ効果音を重ねて鳴らす</h2>
+<p>1つのプレイヤーで <code>play()</code> を連続で呼ぶと、前の音が止まって最初から鳴り直します。連射音のように重ねたいときは、「Max Polyphony」を2以上にします。</p>
+<pre><code class="language-gdscript">se_shot.max_polyphony = 8
+</code></pre>
+<p>これで、同じプレイヤーから最大8つの音を同時に鳴らせます。</p>
+<h2>毎回少しだけ音を変える</h2>
+<p>同じ音が何度も鳴ると単調に聞こえます。再生のたびにピッチを少し変えると、自然になります。</p>
+<pre><code class="language-gdscript">func play_footstep():
+    se_step.pitch_scale = randf_range(0.92, 1.08)
+    se_step.play()
+</code></pre>
+<p>ピッチの代わりに、複数の音からランダムに選ぶ「AudioStreamRandomizer」を Stream に設定する方法もあります。</p>
+<h2>バスで音量を分けて管理する</h2>
+<p>画面下部の「オーディオ」パネルで、バスを追加できます。Masterの下に「BGM」と「SE」を作り、各プレイヤーの「Bus」プロパティで振り分けます。</p>
+<p>音量の変更は <code>AudioServer</code> から行います。バスの音量はdB単位なので、スライダーの0〜1は <code>linear_to_db()</code> で変換します。</p>
+<pre><code class="language-gdscript">func set_bus_volume(bus_name: String, value: float) -&gt; void:
+    var index := AudioServer.get_bus_index(bus_name)
+    AudioServer.set_bus_volume_db(index, linear_to_db(value))
+    AudioServer.set_bus_mute(index, value &lt;= 0.001)
+</code></pre>
+<p>値が0のときは <code>linear_to_db()</code> がマイナス無限大を返すので、ミュートで処理しています。</p>
+<h2>よくあるトラブル</h2>
+<p><strong>音が鳴らない。</strong> Streamが空、Busの名前が変わっている、音量が-80dBのまま、のどれかであることが多いです。</p>
+<p><strong>音が遅れる。</strong> 効果音ファイルの先頭に無音がないか確認します。WAVの方が、OGGより再生開始までの遅れが少なくなります。</p>
+<p><strong>BGMのループがつながらない。</strong> インポート設定でループを有効にします。ループ位置の計算は<a href="../bgm-loop-calc/">BGMのループ長とループポイントの計算方法</a>で説明しています。</p></article>
+</main>
+<footer><div class="in">
+<p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>
+
+<p>&copy; 2026 ゲーム音のどうぐ箱</p>
+</div></footer>
+</body>
+</html>

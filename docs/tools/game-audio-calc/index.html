@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲーム音響計算機｜Unity音量dB変換・BGMループ長・ファイルサイズ</title>
+<meta name="description" content="Unity の AudioSource（0〜1）と AudioMixer（dB）の音量変換、BPMからBGMのループ長とサンプル数、WAV/OGGのファイルサイズ見積もりをブラウザだけで計算できる無料ツールです。">
+
+<style>
+:root{
+  --bg:#f7f7f5; --card:#ffffff; --text:#1d1d1f; --muted:#5f6368; --line:#e3e3df;
+  --accent:#2f6fde; --accent-soft:#e8f0fd; --good:#1f8a4c; --warn:#b26a00;
+  --radius:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#141416; --card:#1e1e22; --text:#ececef; --muted:#a0a0a8; --line:#2f2f35;
+    --accent:#7aa7ff; --accent-soft:#22304a; --good:#5cc98a; --warn:#f0b35a;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic UI",system-ui,sans-serif;line-height:1.7}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+.pr{font-size:12px;color:var(--muted);margin:0 0 12px}
+h1{font-size:clamp(22px,4vw,30px);line-height:1.35;margin:0 0 8px}
+.lead{color:var(--muted);margin:0 0 24px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--text);
+  padding:9px 14px;border-radius:999px;font-size:14px;cursor:pointer}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.panel{display:none;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.panel.active{display:block}
+.panel h2{font-size:19px;margin:0 0 4px}
+.panel .desc{color:var(--muted);font-size:14px;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+input,select{width:100%;padding:10px 12px;font-size:16px;border:1px solid var(--line);
+  border-radius:10px;background:var(--bg);color:var(--text)}
+input[type=range]{padding:0}
+.out{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.stat{background:var(--accent-soft);border-radius:12px;padding:12px 14px}
+.stat .k{font-size:12px;color:var(--muted)}
+.stat .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;word-break:break-all}
+pre{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;
+  overflow-x:auto;font-size:13px;margin:16px 0 0}
+.copy{margin-top:8px;font-size:13px;border:1px solid var(--line);background:var(--card);
+  color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer}
+.note{font-size:13px;color:var(--muted);margin-top:12px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+section.block{margin-top:36px}
+section.block h2{font-size:20px;margin:0 0 12px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.card{display:block;text-decoration:none;color:inherit;background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.card:hover{border-color:var(--accent)}
+.card .tag{font-size:11px;color:var(--muted)}
+.card strong{display:block;margin:4px 0}
+.card span{font-size:13px;color:var(--muted)}
+.own{border-color:var(--accent);background:var(--accent-soft)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-bottom:8px}
+summary{cursor:pointer;font-weight:600}
+footer{margin-top:40px;font-size:12px;color:var(--muted)}
+</style>
+<link rel="canonical" href="https://inaruna.github.io/game-sound-site/tools/game-audio-calc/">
+</head>
+<body>
+<div class="wrap">
+  <p style="margin:0 0 12px;font-size:14px"><a href="../../" style="color:var(--accent)">← ゲーム音のどうぐ箱</a></p>
+  
+  <h1>ゲーム音響計算機</h1>
+  <p class="lead">Unityの音量dB変換、BGMのループ長、音声ファイルの容量見積もりを、ブラウザだけで計算できます。入力した値はどこにも送信されません。</p>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" aria-selected="true" data-tab="db">音量 dB ⇔ リニア</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="loop">BGMループ長</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="size">ファイルサイズ</button>
+  </div>
+
+  <!-- dB -->
+  <div class="panel active" id="p-db" role="tabpanel">
+    <h2>音量 dB ⇔ リニア変換</h2>
+    <p class="desc">AudioSource.volume（0〜1）と AudioMixer のdB値を相互に変換します。音量スライダーをdBで作るときの目安にどうぞ。</p>
+    <div class="grid">
+      <div>
+        <label for="lin">リニア値（0〜1）</label>
+        <input id="lin" type="number" min="0" max="1" step="0.01" value="0.5">
+      </div>
+      <div>
+        <label for="db">dB（-80〜+20）</label>
+        <input id="db" type="number" min="-80" max="20" step="0.1" value="-6.02">
+      </div>
+    </div>
+    <div style="margin-top:14px">
+      <label for="linr">スライダー</label>
+      <input id="linr" type="range" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div class="out">
+      <div class="stat"><div class="k">リニア</div><div class="v" id="o-lin">0.500</div></div>
+      <div class="stat"><div class="k">dB</div><div class="v" id="o-db">-6.02 dB</div></div>
+      <div class="stat"><div class="k">体感の目安</div><div class="v" id="o-feel" style="font-size:16px">少し小さい</div></div>
+    </div>
+    <table aria-label="早見表">
+      <thead><tr><th>リニア</th><th>dB</th><th>リニア</th><th>dB</th></tr></thead>
+      <tbody id="dbtable"></tbody>
+    </table>
+    <pre id="code-db">// スライダー値（0〜1）を AudioMixer に渡す
+public void SetVolume(float value)
+{
+    float dB = Mathf.Log10(Mathf.Max(value, 0.0001f)) * 20f;
+    mixer.SetFloat("BGMVolume", dB); // 露出したパラメーター名
+}</pre>
+    <button class="copy" data-copy="code-db">コードをコピー</button>
+    <p class="note">0は-80dB（Unity AudioMixerの最小値）として扱います。dB = 20 × log10(リニア値) で計算しています。</p>
+  </div>
+
+  <!-- Loop -->
+  <div class="panel" id="p-loop" role="tabpanel">
+    <h2>BGMループ長・サンプル数</h2>
+    <p class="desc">BPMと小節数から、ループの秒数とサンプル数を出します。ループポイントの指定やAudioClipの切り出しに使えます。</p>
+    <div class="grid">
+      <div><label for="bpm">BPM</label><input id="bpm" type="number" min="20" max="400" step="0.01" value="120"></div>
+      <div><label for="beats">拍子（1小節の拍数）</label>
+        <select id="beats"><option value="2">2/4</option><option value="3">3/4</option><option value="4" selected>4/4</option><option value="5">5/4</option><option value="6">6/8（6拍）</option><option value="7">7/8（7拍）</option></select></div>
+      <div><label for="bars">小節数</label><input id="bars" type="number" min="1" max="999" step="1" value="16"></div>
+      <div><label for="sr">サンプルレート</label>
+        <select id="sr"><option value="44100">44,100 Hz</option><option value="48000" selected>48,000 Hz</option><option value="96000">96,000 Hz</option></select></div>
+    </div>
+    <div class="out">
+      <div class="stat"><div class="k">ループ長</div><div class="v" id="o-sec">32.000 秒</div></div>
+      <div class="stat"><div class="k">サンプル数</div><div class="v" id="o-smp">1,536,000</div></div>
+      <div class="stat"><div class="k">1拍</div><div class="v" id="o-beat">500.00 ms</div></div>
+      <div class="stat"><div class="k">1小節</div><div class="v" id="o-bar">2.000 秒</div></div>
+    </div>
+    <p class="note" id="loopwarn"></p>
+    <p class="note">秒数 = 小節数 × 拍数 × 60 ÷ BPM、サンプル数 = 秒数 × サンプルレート（四捨五入）。</p>
+  </div>
+
+  <!-- Size -->
+  <div class="panel" id="p-size" role="tabpanel">
+    <h2>音声ファイルサイズ見積もり</h2>
+    <p class="desc">WAV（非圧縮）とOGG/MP3（指定ビットレート）の容量を比べます。効果音を何本入れるとどれくらいになるかの見積もりに。</p>
+    <div class="grid">
+      <div><label for="dur">長さ（秒）</label><input id="dur" type="number" min="0" step="0.1" value="10"></div>
+      <div><label for="cnt">本数</label><input id="cnt" type="number" min="1" step="1" value="50"></div>
+      <div><label for="sr2">サンプルレート</label>
+        <select id="sr2"><option value="22050">22,050 Hz</option><option value="44100" selected>44,100 Hz</option><option value="48000">48,000 Hz</option></select></div>
+      <div><label for="bit">ビット深度</label>
+        <select id="bit"><option value="16" selected>16 bit</option><option value="24">24 bit</option><option value="32">32 bit float</option></select></div>
+      <div><label for="ch">チャンネル</label>
+        <select id="ch"><option value="1">モノラル</option><option value="2" selected>ステレオ</option></select></div>
+      <div><label for="kbps">圧縮ビットレート（kbps）</label>
+        <select id="kbps"><option>64</option><option>96</option><option selected>128</option><option>160</option><option>192</option><option>256</option></select></div>
+    </div>
+    <div class="out">
+      <div class="stat"><div class="k">WAV 1本</div><div class="v" id="o-w1">-</div></div>
+      <div class="stat"><div class="k">WAV 合計</div><div class="v" id="o-wt">-</div></div>
+      <div class="stat"><div class="k">OGG/MP3 1本</div><div class="v" id="o-c1">-</div></div>
+      <div class="stat"><div class="k">OGG/MP3 合計</div><div class="v" id="o-ct">-</div></div>
+    </div>
+    <p class="note">WAVは44バイトのヘッダーを含む概算です。圧縮形式は固定ビットレート換算のため、実際のファイルは前後します。</p>
+  </div>
+
+  <!-- FAQ -->
+  <section class="block">
+    <h2>よくある質問</h2>
+    <details><summary>Unityの音量スライダーを線形のままミキサーに渡すとどうなりますか？</summary>
+      <p>AudioMixerはdB単位なので、0〜1の値をそのまま渡すとほぼ無音の範囲しか動きません。上のコードのように、20 × log10(値) でdBに変換してから渡します。</p></details>
+    <details><summary>BGMのループがずれるのはなぜですか？</summary>
+      <p>ループ長を秒で丸めると、サンプル単位でずれが出ます。サンプル数で指定し、書き出し時のサンプルレートとゲーム側の設定を合わせると防げます。</p></details>
+    <details><summary>効果音はWAVとOGGのどちらがいいですか？</summary>
+      <p>短く頻繁に鳴る音は読み込みの速いWAV、長いBGMや環境音は容量の小さいOGGが一般的です。容量が気になる場合は、上のファイルサイズ計算で比べてみてください。</p></details>
+  </section>
+
+  <footer>計算はすべてお使いのブラウザ内で行われます。<br><a href="../../articles/unity-volume-db/" style="color:var(--muted)">Unityの音量をdBに変換する方法</a> ／ <a href="../../articles/bgm-loop-calc/" style="color:var(--muted)">BGMのループ長の計算方法</a> ／ <a href="../../articles/wav-vs-ogg/" style="color:var(--muted)">WAVとOGGの選び方</a> ／ <a href="../../privacy/" style="color:var(--muted)">プライバシーポリシー</a></footer>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const fmt = (n, d) => n.toLocaleString('ja-JP', {minimumFractionDigits:d, maximumFractionDigits:d});
+
+  // tabs
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', 'false'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.setAttribute('aria-selected', 'true');
+      $('p-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // dB <-> linear
+  const MIN_DB = -80;
+  const linToDb = v => v <= 0 ? MIN_DB : Math.max(MIN_DB, 20 * Math.log10(v));
+  const dbToLin = d => d <= MIN_DB ? 0 : Math.pow(10, d / 20);
+  function feel(d){
+    if (d <= -60) return 'ほぼ無音';
+    if (d <= -20) return 'かなり小さい';
+    if (d <= -10) return '体感で約半分以下';
+    if (d < -3) return '少し小さい';
+    if (d <= 0.5) return 'ほぼ等倍';
+    return '元より大きい（音割れ注意）';
+  }
+  function showDb(lin, db){
+    $('o-lin').textContent = fmt(lin, 3);
+    $('o-db').textContent = (db <= MIN_DB ? '-80.00' : fmt(db, 2)) + ' dB';
+    $('o-feel').textContent = feel(db);
+  }
+  $('lin').addEventListener('input', () => {
+    const v = Math.min(1, Math.max(0, parseFloat($('lin').value) || 0));
+    const d = linToDb(v);
+    $('db').value = d.toFixed(2); $('linr').value = v; showDb(v, d);
+  });
+  $('linr').addEventListener('input', () => {
+    const v = parseFloat($('linr').value);
+    const d = linToDb(v);
+    $('lin').value = v; $('db').value = d.toFixed(2); showDb(v, d);
+  });
+  $('db').addEventListener('input', () => {
+    const d = Math.min(20, Math.max(MIN_DB, parseFloat($('db').value)));
+    if (isNaN(d)) return;
+    const v = dbToLin(d);
+    $('lin').value = v.toFixed(4); $('linr').value = Math.min(1, v); showDb(v, d);
+  });
+  const rows = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05, 0.01];
+  let html = '';
+  for (let i = 0; i < rows.length; i += 2) {
+    const a = rows[i], b = rows[i + 1];
+    html += `<tr><td>${a}</td><td>${fmt(linToDb(a), 2)}</td><td>${b}</td><td>${fmt(linToDb(b), 2)}</td></tr>`;
+  }
+  $('dbtable').innerHTML = html;
+
+  // loop
+  function calcLoop(){
+    const bpm = parseFloat($('bpm').value), beats = parseInt($('beats').value, 10);
+    const bars = parseInt($('bars').value, 10), sr = parseInt($('sr').value, 10);
+    if (!(bpm > 0) || !(bars > 0)) return;
+    const beatSec = 60 / bpm;
+    const sec = bars * beats * beatSec;
+    const exact = sec * sr;
+    const smp = Math.round(exact);
+    $('o-sec').textContent = fmt(sec, 3) + ' 秒';
+    $('o-smp').textContent = smp.toLocaleString('ja-JP');
+    $('o-beat').textContent = fmt(beatSec * 1000, 2) + ' ms';
+    $('o-bar').textContent = fmt(beats * beatSec, 3) + ' 秒';
+    const frac = Math.abs(exact - smp);
+    $('loopwarn').textContent = frac > 1e-6
+      ? `※このBPMでは割り切れず、${frac.toFixed(3)}サンプルの端数を丸めています。ループ1周ごとのずれは1サンプル未満です。`
+      : '';
+  }
+  ['bpm','beats','bars','sr'].forEach(id => $(id).addEventListener('input', calcLoop));
+
+  // size
+  function human(bytes){
+    if (bytes >= 1024 ** 3) return fmt(bytes / 1024 ** 3, 2) + ' GB';
+    if (bytes >= 1024 ** 2) return fmt(bytes / 1024 ** 2, 2) + ' MB';
+    return fmt(bytes / 1024, 1) + ' KB';
+  }
+  function calcSize(){
+    const dur = parseFloat($('dur').value) || 0, cnt = parseInt($('cnt').value, 10) || 1;
+    const sr = parseInt($('sr2').value, 10), bit = parseInt($('bit').value, 10);
+    const ch = parseInt($('ch').value, 10), kbps = parseInt($('kbps').value, 10);
+    const wav = sr * (bit / 8) * ch * dur + 44;
+    const comp = kbps * 1000 / 8 * dur;
+    $('o-w1').textContent = human(wav);
+    $('o-wt').textContent = human(wav * cnt);
+    $('o-c1').textContent = human(comp);
+    $('o-ct').textContent = human(comp * cnt);
+  }
+  ['dur','cnt','sr2','bit','ch','kbps'].forEach(id => $(id).addEventListener('input', calcSize));
+
+  // copy
+  document.querySelectorAll('.copy').forEach(b => b.addEventListener('click', () => {
+    const t = $(b.dataset.copy).textContent;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject())
+      .then(() => { b.textContent = 'コピーしました'; setTimeout(() => b.textContent = 'コードをコピー', 1500); })
+      .catch(() => { b.textContent = 'コピーできませんでした'; });
+  }));
+
+  calcLoop(); calcSize();
+})();
+</script>
+</body>
+</html>
