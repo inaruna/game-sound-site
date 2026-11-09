@@ -19,10 +19,13 @@ import markdown
 ROOT = Path(__file__).parent
 DIST = ROOT / "docs"
 CFG = json.loads((ROOT / "config.json").read_text(encoding="utf-8"))
-LINKS = {k: v.strip() for k, v in json.loads((ROOT / "links.json").read_text(encoding="utf-8")).items()
-         if not k.startswith("_")}
+_RAW = json.loads((ROOT / "links.json").read_text(encoding="utf-8"))
+RAKUTEN_ID = str(_RAW.get("RAKUTEN_ID", "")).strip()
+RAKUTEN_ITEMS = _RAW.get("RAKUTEN_ITEMS", {}) or {}
+LINKS = {k: v.strip() for k, v in _RAW.items()
+         if not k.startswith("_") and isinstance(v, str) and k != "RAKUTEN_ID"}
 HAS_AMAZON = any(v for k, v in LINKS.items() if k.startswith("AMAZON"))
-HAS_RAKUTEN = any(v for k, v in LINKS.items() if k.startswith("RAKUTEN"))
+HAS_RAKUTEN = bool(RAKUTEN_ID)
 HAS_UNITY = any(v for k, v in LINKS.items() if k.startswith("UNITY"))
 SITE = CFG["site_name"]
 BASE = CFG["site_url"].rstrip("/")
@@ -61,6 +64,8 @@ p code,li code,td code{background:var(--code);padding:1px 5px;border-radius:5px;
 .box span{display:block;font-size:14px;color:var(--muted)}
 .box .go{display:block;margin-top:8px;font-size:14px;color:var(--accent);font-weight:600}
 .own,.toolbox{border-color:var(--accent);background:var(--accent-soft)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{display:inline-block;padding:6px 14px;border:1px solid var(--accent);border-radius:999px;font-size:14px;font-weight:600;text-decoration:none}
 .meta{font-size:13px;color:var(--muted);margin-bottom:24px}
 .list{list-style:none;padding:0}
 .list li{margin:0 0 12px}
@@ -117,14 +122,33 @@ def itch_box():
             f'<span>{esc(CFG["itch_desc"])}</span><span class="go">itch.ioで見る →</span></a></div>')
 
 
-def aff_box(key, name, desc):
-    url = LINKS.get(key, "")
-    if not url:
+def rakuten_url(base):
+    kw = RAKUTEN_ITEMS.get(base, "")
+    if not (RAKUTEN_ID and kw):
         return ""
-    shop = "Unity Asset Store" if key.startswith("UNITY") else ("楽天市場" if key.startswith("RAKUTEN") else "Amazon")
-    return (f'<div class="boxwrap"><a class="box" href="{esc(url)}" target="_blank" rel="sponsored noopener">'
-            f'<span class="tag">広告・{shop}</span><strong>{esc(name)}</strong>'
-            f'<span>{esc(desc)}</span><span class="go">{shop}で見る →</span></a></div>')
+    from urllib.parse import quote
+    target = quote(f"https://search.rakuten.co.jp/search/mall/{quote(kw)}/", safe="")
+    return f"https://hb.afl.rakuten.co.jp/hgc/{RAKUTEN_ID}/?pc={target}&m={target}"
+
+
+def shop_links(key):
+    base = re.sub(r"^(AMAZON|RAKUTEN|UNITY)_", "", key)
+    out = []
+    if rakuten_url(base):
+        out.append(("楽天市場", rakuten_url(base)))
+    for prefix, shop in (("AMAZON_", "Amazon"), ("UNITY_", "Unity Asset Store")):
+        if LINKS.get(prefix + base):
+            out.append((shop, LINKS[prefix + base]))
+    return out
+
+
+def aff_box(key, name, desc):
+    shops = shop_links(key)
+    if not shops:
+        return ""
+    btns = "".join(f'<a class="btn" href="{esc(u)}" target="_blank" rel="sponsored noopener">{shop}で見る →</a>' for shop, u in shops)
+    return (f'<div class="boxwrap"><div class="box"><span class="tag">広告</span><strong>{esc(name)}</strong>'
+            f'<span>{esc(desc)}</span><span class="btns">{btns}</span></div></div>')
 
 
 def tool_box(root):
@@ -252,7 +276,10 @@ def build():
 
     # tool
     tool = (ROOT / "tools/game-audio-calc.html").read_text(encoding="utf-8")
-    repl = {"ITCH_URL": CFG.get("itch_url", ""), "AFF_AMAZON_BOOK_SFX": LINKS.get("AMAZON_BOOK_SFX", "")}
+    book = shop_links("BOOK_SFX")
+    if book:
+        tool = tool.replace('<div class="tag">広告・Amazon</div>', f'<div class="tag">広告・{book[0][0]}</div>')
+    repl = {"ITCH_URL": CFG.get("itch_url", ""), "AFF_AMAZON_BOOK_SFX": book[0][1] if book else ""}
     for key, url in repl.items():
         pattern = re.compile(r'\s*<!--[^>]*' + key + r'[^>]*-->\s*<a class="card[^"]*" href="' + key + r'".*?</a>', re.S)
         if url:

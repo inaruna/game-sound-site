@@ -1,9 +1,14 @@
 {
-  "_説明": "発行したアフィリエイトリンクを \"\" の中に貼るだけです。空のままの枠はページに表示されません。",
+  "_説明": "AMAZON_〇〇 にAmazonのリンクを貼ります。RAKUTEN_ID があれば、RAKUTEN_ITEMS の検索語（ISBNなど）から楽天のリンクを自動で作ります。空の枠はページに表示されません。",
   "AMAZON_BOOK_SFX": "",
   "AMAZON_BOOK_SFX2": "",
   "AMAZON_BOOK_COMPOSE": "",
   "AMAZON_BOOK_HISTORY": "",
   "AMAZON_HP_CD900ST": "",
-  "AMAZON_HP_M50X": ""
+  "AMAZON_HP_M50X": "",
+  "RAKUTEN_ID": "594cf9a3.5e00a8c3.594cf9a4.9a7e5c2a",
+  "RAKUTEN_ITEMS": {
+    "BOOK_SFX": "9784297133481",
+    "BOOK_COMPOSE": "9784873117294"
+  }
 }

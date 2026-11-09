@@ -28,6 +28,8 @@ p code,li code,td code{background:var(--code);padding:1px 5px;border-radius:5px;
 .box span{display:block;font-size:14px;color:var(--muted)}
 .box .go{display:block;margin-top:8px;font-size:14px;color:var(--accent);font-weight:600}
 .own,.toolbox{border-color:var(--accent);background:var(--accent-soft)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{display:inline-block;padding:6px 14px;border:1px solid var(--accent);border-radius:999px;font-size:14px;font-weight:600;text-decoration:none}
 .meta{font-size:13px;color:var(--muted);margin-bottom:24px}
 .list{list-style:none;padding:0}
 .list li{margin:0 0 12px}
