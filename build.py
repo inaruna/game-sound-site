@@ -64,7 +64,7 @@ p code,li code,td code{background:var(--code);padding:1px 5px;border-radius:5px;
 .box span{display:block;font-size:14px;color:var(--muted)}
 .box .go{display:block;margin-top:8px;font-size:14px;color:var(--accent);font-weight:600}
 .own,.toolbox{border-color:var(--accent);background:var(--accent-soft)}
-.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.box .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .btn{display:inline-block;padding:6px 14px;border:1px solid var(--accent);border-radius:999px;font-size:14px;font-weight:600;text-decoration:none}
 .meta{font-size:13px;color:var(--muted);margin-bottom:24px}
 .list{list-style:none;padding:0}
@@ -234,7 +234,7 @@ def build():
     body = (f'<h1>運営者情報</h1><table><tr><th>サイト名</th><td>{esc(SITE)}</td></tr>'
             f'<tr><th>運営者</th><td>{op}</td></tr><tr><th>連絡先</th><td>{ct}</td></tr>'
             f'<tr><th>内容</th><td>{esc(CFG["site_description"])}</td></tr></table>'
-            '<p>当サイトは、ゲーム用の効果音素材と制作ツールを販売している個人が運営しています。'
+            '<p>当サイトは、ゲーム用の効果音の制作ツールを販売している個人が運営しています。'
             '記事内で紹介する運営者自身の商品には、「当サイト運営者のツール（販売中）」のように表示しています。</p>'
             + ('<p>販売中の商品（itch.io）：' + '、'.join(f'<a href="{esc(x["url"])}" target="_blank" rel="noopener">{esc(x["name"])}</a>' for x in CFG.get("itch_products", [])) + '</p>' if CFG.get("itch_products") else "")
             + '<p>当サイトはアフィリエイトプログラムで収入を得ることがあります。紹介する商品は、公式の仕様や出版社の情報をもとに選んでおり、'
@@ -251,7 +251,7 @@ def build():
     joined = [n for n, on in (("楽天アフィリエイト", HAS_RAKUTEN), ("Unity Affiliate Program", HAS_UNITY)) if on]
     joined_p = f"<p>当サイトは、{'、'.join(joined)}を利用しています。</p>" if joined else ""
     if not (HAS_AMAZON or joined):
-        joined_p = "<p>当サイトは、アフィリエイトプログラムへの参加を予定しています。参加後は、このページで参加しているプログラムを明記します。</p>"
+        joined_p = "<p>当サイトは現在、アフィリエイトリンクを掲載していません。掲載する場合は、利用するプログラムをこのページに明記します。</p>"
     revised = CFG.get("privacy_revised", "")
     body = f"""<h1>プライバシーポリシー・免責事項</h1>
 <h2>広告について</h2>

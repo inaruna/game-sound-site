@@ -6,9 +6,10 @@
   "AMAZON_BOOK_HISTORY": "",
   "AMAZON_HP_CD900ST": "",
   "AMAZON_HP_M50X": "",
-  "RAKUTEN_ID": "594cf9a3.5e00a8c3.594cf9a4.9a7e5c2a",
   "RAKUTEN_ITEMS": {
     "BOOK_SFX": "9784297133481",
     "BOOK_COMPOSE": "9784873117294"
-  }
+  },
+  "RAKUTEN_ID_PENDING": "594cf9a3.5e00a8c3.594cf9a4.9a7e5c2a",
+  "_楽天メモ": "楽天の規約（自作リンク・検索結果ページへのリンクの可否）を確認できたら、RAKUTEN_ID_PENDING を RAKUTEN_ID に戻すと楽天のリンクが有効になります。"
 }
