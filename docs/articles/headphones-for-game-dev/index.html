@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ゲーム制作向けヘッドホンの選び方｜効果音・BGMの確認に使うモニターヘッドホン｜ゲーム音のどうぐ箱</title>
+<meta name="description" content="ゲームの効果音やBGMを確認するためのヘッドホンの選び方を、メーカー公式の解説と仕様の比較表で整理します。Godot 4のAudioStreamPlayer3Dで左右の位置と距離の聞こえ方を確かめる手順も紹介します。">
+<link rel="canonical" href="https://inaruna.github.io/game-sound-site/articles/headphones-for-game-dev/">
+<meta property="og:title" content="ゲーム制作向けヘッドホンの選び方｜効果音・BGMの確認に使うモニターヘッドホン｜ゲーム音のどうぐ箱">
+<meta property="og:description" content="ゲームの効果音やBGMを確認するためのヘッドホンの選び方を、メーカー公式の解説と仕様の比較表で整理します。Godot 4のAudioStreamPlayer3Dで左右の位置と距離の聞こえ方を確かめる手順も紹介します。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://inaruna.github.io/game-sound-site/articles/headphones-for-game-dev/">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<header class="top"><div class="in">
+<a class="logo" href="../../">ゲーム音のどうぐ箱</a>
+<nav><a href="../../tools/game-audio-calc/">ツール</a><a href="../../#articles">記事</a></nav>
+</div></header>
+<main>
+<article><h1>ゲーム制作向けヘッドホンの選び方｜効果音・BGMの確認に使うモニターヘッドホン</h1><p class="pr">【PR】この記事には、当サイト運営者が販売している商品の紹介が含まれます。</p><div class="meta">公開日：2026-11-18</div><p>効果音やBGMの音量をヘッドホンで決めるとき、ヘッドホン自体の音の傾向が判断に影響することがあります。</p>
+<p>この記事では、メーカー公式の解説と仕様をもとに、ヘッドホンを選ぶときに見る点を整理します。後半では、Godot 4 で効果音の左右と距離の聞こえ方を確かめる手順を紹介します（クラスリファレンスは 4.4 版で確認）。</p>
+<h2>選ぶときの4つのポイント</h2>
+<h3>1. 音の傾向がフラットかどうか</h3>
+<p>オーディオテクニカの<a href="https://www.audio-technica.co.jp/headphone/navi/whatis/07.php">モニターヘッドホンの解説</a>では、低音を例に次のように書かれています。</p>
+<blockquote>
+<p>例えば、低音などが強調された音質のリスニング用ヘッドホンで楽曲制作を行うと、必要以上に低音が強調されて聴こえるため、楽曲の低音の音量を下げてしまい、結果狙った通りのバランスで楽曲制作ができなくなってしまいます。</p>
+</blockquote>
+<p>同じページでは、音楽制作を行う際は、特定の帯域を強調せず、低音域から高音域までフラットな傾向の音質が求められると説明されています。</p>
+<p>また、オーディオテクニカの<a href="https://www.audio-technica.co.jp/always-listening/articles/headphone-basics/">ヘッドホンの基本を説明した記事</a>によると、モニターヘッドホンは主に録音や放送の現場で、音声信号をできるだけ正確に再現する目的で使われます。リスニングヘッドホンは音楽を心地よく楽しむことを重視していて、音質の傾向はメーカーやブランドによってさまざまです。</p>
+<p>効果音の低音の量を決めるときは、こうした傾向の違いを知ったうえでヘッドホンを選ぶとよいでしょう。</p>
+<h3>2. 密閉型か開放型か</h3>
+<p>オーディオテクニカの解説ページ（出典は表の下）をもとに要約しました。両方の型について記述がある項目だけを載せています。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>密閉型</th>
+<th>開放型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>音漏れ</td>
+<td>しにくい（外の音も入りにくい）</td>
+<td>しやすい</td>
+</tr>
+<tr>
+<td>使う場所</td>
+<td>遮音性が高く、屋外でも使える</td>
+<td>基本は室内向け</td>
+</tr>
+<tr>
+<td>用途の例</td>
+<td>細かい音を聞き取る用途</td>
+<td>大きな音を出せない環境で、スピーカーでの出音を確かめたいとき</td>
+</tr>
+</tbody>
+</table>
+<p>出典：</p>
+<ul>
+<li>音漏れ：密閉型は<a href="https://www.audio-technica.co.jp/always-listening/articles/headphone-basics/">ヘッドホンの基本を説明した記事</a>、開放型は<a href="https://www.audio-technica.co.jp/always-listening/articles/open-headphone/">開放型ヘッドホンの記事</a></li>
+<li>使う場所：<a href="https://www.audio-technica.co.jp/headphone/navi/whatis/02-03.php">密閉型と開放型の解説</a></li>
+<li>用途の例：<a href="https://www.audio-technica.co.jp/headphone/navi/whatis/07.php">モニターヘッドホンの解説</a></li>
+</ul>
+<p><a href="https://www.audio-technica.co.jp/headphone/navi/whatis/02-03.php">密閉型と開放型の解説</a>によると、開放型は広い音場が特徴で、密閉型はモニターヘッドホンとして使われることも多いとされています。</p>
+<p>周りに人がいる場所で作業するなら、開放型は音漏れしやすいことも考えに入れておきましょう。</p>
+<h3>3. 重さは測定条件をそろえて比べる</h3>
+<p>つけたまま作業する時間が長いなら、重さも比べておきたい項目の1つです。ただし、メーカーが公表する重さには、ケーブルを含まない値があります。下の比較表の2機種は、どちらもケーブルを除いた値です。別の機種と比べるときは、ケーブルを含むかどうかを公式の仕様で確かめてから比べましょう。</p>
+<h3>4. ケーブルが着脱できるか</h3>
+<p><a href="https://www.audio-technica.co.jp/headphone/navi/whatis/07.php">モニターヘッドホンの解説</a>によると、使い勝手やメンテナンス性を考えて、コードを着脱できるモデルや、伸び縮みするカールコードのモデルもあります。コードは長いものが多く、3.0m程度が一般的とされています。机とPCの距離など、自分の作業環境に合うコードかどうかも見ておきましょう。</p>
+<h2>モニターヘッドホン2機種の公式仕様</h2>
+<p>ソニーは製品ページで MDR-CD900ST をモニターヘッドホンとして説明し、オーディオテクニカは ATH-M50x をモニターヘッドホンシリーズのページに載せています。この2機種について、公式の仕様を並べました。実際に使った感想ではありません。</p>
+<p>仕様はメーカー公式の製品ページで確認しました。公式ページで記述を確認できなかった項目は「公式ページに記載なし」としています。仕様は変わることがあるので、購入前に公式で最新を確認してください。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>SONY MDR-CD900ST</th>
+<th>audio-technica ATH-M50x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>型式</td>
+<td>密閉ダイナミック型</td>
+<td>密閉ダイナミック型</td>
+</tr>
+<tr>
+<td>重さ</td>
+<td>約200g（コード含まず）</td>
+<td>285g（コード除く）</td>
+</tr>
+<tr>
+<td>インピーダンス</td>
+<td>63Ω</td>
+<td>38Ω</td>
+</tr>
+<tr>
+<td>ケーブル着脱</td>
+<td>公式ページに記載なし</td>
+<td>着脱式（バヨネット式ロック機構）</td>
+</tr>
+<tr>
+<td>付属コード</td>
+<td>2.5m</td>
+<td>カールコード1.2m（伸ばすと約3m）、ストレートコード3.0m、ストレートコード1.2m</td>
+</tr>
+<tr>
+<td>プラグ</td>
+<td>ステレオ標準プラグ</td>
+<td>φ6.3mm標準／φ3.5mmミニの金メッキステレオ2ウェイ</td>
+</tr>
+<tr>
+<td>折りたたみ</td>
+<td>公式ページに記載なし</td>
+<td>可</td>
+</tr>
+<tr>
+<td>発売</td>
+<td>1989年（消費者向けは1990年から）</td>
+<td>2014年2月14日</td>
+</tr>
+</tbody>
+</table>
+<p>2026年11月18日時点で、MDR-CD900ST はソニーの製品ページに、ATH-M50x はオーディオテクニカのモニターヘッドホンシリーズのページのラインナップに掲載されています。販売状況は公式で確認してください。</p>
+<h3>SONY MDR-CD900ST</h3>
+<p>製品ページでは「完全プロフェッショナル仕様のモニターヘッドホン」と説明され、「数多くのレコーディングスタジオで愛用されている音楽業界のハイスタンダード」とも紹介されています。製品ページによると、もともとはCBSソニー信濃町スタジオ（現：ソニー・ミュージックスタジオ）で使うために開発されたモデルです。</p>
+<p>製品ページでは、業務使用を目的としたプロフェッショナル仕様のヘッドホンのため、無償修理期間は設定されておらず、修理はすべて有償とされています。修理の条件は変わることがあるので、公式で最新を確認してください。</p>
+<h3>audio-technica ATH-M50x</h3>
+<p>メーカーは「スタジオレコーディングやミキシングに最適」と紹介しています。ATH-M50 をリニューアルしたモデルです。ケーブルは着脱式で、折りたたみ機構でコンパクトになると説明されています。</p>
+<h2>ゲーム制作ならではの確認手順</h2>
+<p>ゲームでは、音源と聞き手の位置関係で効果音の聞こえ方を変えられます。Godot の公式ドキュメントによると、AudioStreamPlayer3D は聞き手（audio listener）との位置関係にもとづいて音を鳴らし、距離による減衰、方向、ドップラー効果がかかります。左右の位置と距離による音の変化を、ヘッドホンで確かめてみましょう。</p>
+<p>※AudioStreamPlayer3D は Godot 4.4 のクラスリファレンス、AudioStreamPlayer2D は latest（開発版）のクラスリファレンスで確認した内容です。お使いのバージョンのドキュメントもあわせて確認してください。</p>
+<h3>使うプロパティ</h3>
+<table>
+<thead>
+<tr>
+<th>プロパティ</th>
+<th>公式ドキュメントの説明（要約）</th>
+<th>既定値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>attenuation_model</td>
+<td>距離に応じて音を小さくする方法を決める。減衰なしも選べる</td>
+<td>0（ATTENUATION_INVERSE_DISTANCE）</td>
+</tr>
+<tr>
+<td>max_distance</td>
+<td>この距離を超えると、音がまったく聞こえなくなる。0.0 より大きい値のときだけ効く</td>
+<td>0.0（無効）</td>
+</tr>
+<tr>
+<td>unit_size</td>
+<td>減衰の効き方の係数。大きくするほど、遠くまで聞こえる</td>
+<td>10.0</td>
+</tr>
+<tr>
+<td>panning_strength</td>
+<td>プロジェクト設定の audio/general/3d_panning_strength に掛ける倍率。値が大きいほど、左右のパンが大きくかかる</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+<p>attenuation_model で選べる定数と、公式ドキュメントでの説明は次のとおりです。</p>
+<table>
+<thead>
+<tr>
+<th>定数</th>
+<th>公式の説明での小さくなり方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ATTENUATION_INVERSE_DISTANCE</td>
+<td>直線的な距離に応じて小さくなる</td>
+</tr>
+<tr>
+<td>ATTENUATION_INVERSE_SQUARE_DISTANCE</td>
+<td>距離の二乗に応じて小さくなる</td>
+</tr>
+<tr>
+<td>ATTENUATION_LOGARITHMIC</td>
+<td>対数的な距離に応じて小さくなる</td>
+</tr>
+<tr>
+<td>ATTENUATION_DISABLED</td>
+<td>距離の影響を受けない（位置による聞こえ方は残る）</td>
+</tr>
+</tbody>
+</table>
+<h3>手順</h3>
+<ol>
+<li>3Dシーンに AudioStreamPlayer3D を置き、確認したい効果音を Stream に設定します。公式ドキュメントによると、音は既定でカメラの位置で聞こえます。聞く位置を変えたいときは、シーンに AudioListener3D を置き、make_current() を呼んで有効にします。</li>
+<li>ヘッドホンをつけて、音源を聞き手の左右に動かしながら鳴らします。左にあるときに左から聞こえるかを確かめます。</li>
+<li>panning_strength を既定値の 1.0 より小さい値や大きい値に変えて、もう一度鳴らします。公式ドキュメントでは、値が大きいほど左右のパンが大きくかかるとされています。左右の変化の大きさがどう変わるかを聞き比べます。</li>
+<li>attenuation_model を切り替えて、音源から離れたときの小さくなり方を聞き比べます。公式ドキュメントによると、距離に応じてローパスフィルターもかかります（attenuation_filter_cutoff_hz、既定値 5000 Hz）。離れると音量だけでなく音色も変わるので、そのつもりで聞きましょう。</li>
+<li>unit_size を変えて、どのくらい離れるまで聞こえるかを確かめます。</li>
+<li>max_distance を 0 より大きい値（例：30）にします。既定値の 0.0 のままでは、聞こえなくなる境目がありません。境目をまたぐように音源を動かし、聞こえなくなる位置を確かめます。音が途切れる位置がゲームの場面に合っているかも聞いておきましょう。</li>
+</ol>
+<p>インスペクターで値を変える代わりに、スクリプトで比べたい値を入れておく方法もあります。</p>
+<p>貼り付けたら、行頭のインデントをお使いのエディタの設定に合わせてください。</p>
+<pre><code class="language-gdscript">extends AudioStreamPlayer3D
+
+func _ready() -&gt; void:
+    # 既定値は unit_size 10.0、max_distance 0.0、panning_strength 1.0
+    # 比べたい値に書き換えて、ヘッドホンで聞き比べる
+    attenuation_model = AudioStreamPlayer3D.ATTENUATION_LOGARITHMIC
+    unit_size = 5.0
+    max_distance = 30.0
+    panning_strength = 0.5
+</code></pre>
+<p>数値は聞き比べのための例です。ゲームの縮尺に合わせて変えてください。</p>
+<p>2Dのゲームでも、AudioStreamPlayer2D は聞き手との距離に応じて音が小さくなると、公式ドキュメントで説明されています。2Dでも、音源を動かしながらヘッドホンで聞いてみましょう。</p>
+<h3>ヘッドホン以外でも鳴らしてみる</h3>
+<p>ヘッドホンで確かめたあとは、スマートフォンの実機やノートPCのスピーカー、イヤホンなど、手元にあるほかの機器でもゲームを動かして聞いてみることをおすすめします。効果音がBGMに埋もれていないか、聞こえ方が大きく変わらないかを確かめておくと安心です。</p>
+<p>Godot で効果音を鳴らす基本は<a href="../godot-sound/">Godot 4で効果音を鳴らす方法</a>で説明しています。</p>
+<h2>まとめ</h2>
+<p>メーカーの解説では、モニターヘッドホンにはフラットな傾向の音質が求められるとされています。選ぶときは、密閉型か開放型か、重さの測定条件、ケーブルの着脱を公式の仕様で比べましょう。ゲームに組み込んだら、Godot の AudioStreamPlayer3D で左右と距離の聞こえ方をヘッドホンで確かめ、最後にほかの機器でも鳴らしてみてください。</p>
+<div class="boxwrap"><a class="box own" href="https://inaruna3565.itch.io/sfx-forge" target="_blank" rel="noopener"><span class="tag">当サイト運営者のツール（販売中）</span><strong>SFX Forge — UI効果音デザイナー</strong><span>35種類のUI操作（決定、キャンセル、ホバーなど）の効果音をブラウザで作り、WAVで一括書き出しできるツール。書き出した音は商用でも使えます（効果音集としての再配布はできません）。</span><span class="go">itch.ioで見る →</span></a></div>
+
+<h2>参考（確認日 2026-11-18）</h2>
+<ul>
+<li>ソニー MDR-CD900ST 製品ページ：<a href="https://www.sony.jp/headphone/products/MDR-CD900ST/">https://www.sony.jp/headphone/products/MDR-CD900ST/</a></li>
+<li>オーディオテクニカ ATH-M50x 製品ページ：<a href="https://www.audio-technica.co.jp/product/ATH-M50x">https://www.audio-technica.co.jp/product/ATH-M50x</a></li>
+<li>オーディオテクニカ モニターヘッドホン シリーズページ：<a href="https://www.audio-technica.co.jp/series/monitor-headphones/">https://www.audio-technica.co.jp/series/monitor-headphones/</a></li>
+<li>オーディオテクニカ 密閉型と開放型の解説：<a href="https://www.audio-technica.co.jp/headphone/navi/whatis/02-03.php">https://www.audio-technica.co.jp/headphone/navi/whatis/02-03.php</a></li>
+<li>オーディオテクニカ モニターヘッドホンの解説：<a href="https://www.audio-technica.co.jp/headphone/navi/whatis/07.php">https://www.audio-technica.co.jp/headphone/navi/whatis/07.php</a></li>
+<li>オーディオテクニカ ヘッドホンの基本を説明した記事：<a href="https://www.audio-technica.co.jp/always-listening/articles/headphone-basics/">https://www.audio-technica.co.jp/always-listening/articles/headphone-basics/</a></li>
+<li>オーディオテクニカ 開放型ヘッドホンの記事：<a href="https://www.audio-technica.co.jp/always-listening/articles/open-headphone/">https://www.audio-technica.co.jp/always-listening/articles/open-headphone/</a></li>
+<li>Godot Engine ドキュメント AudioStreamPlayer3D（4.4）：<a href="https://docs.godotengine.org/en/4.4/classes/class_audiostreamplayer3d.html">https://docs.godotengine.org/en/4.4/classes/class_audiostreamplayer3d.html</a></li>
+<li>Godot Engine ドキュメント AudioStreamPlayer2D（latest）：<a href="https://docs.godotengine.org/en/latest/classes/class_audiostreamplayer2d.html">https://docs.godotengine.org/en/latest/classes/class_audiostreamplayer2d.html</a></li>
+</ul></article>
+</main>
+<footer><div class="in">
+<p><a href="../../about/">運営者情報</a><a href="../../privacy/">プライバシーポリシー・免責事項</a></p>
+
+<p>&copy; 2026 ゲーム音のどうぐ箱</p>
+</div></footer>
+</body>
+</html>
